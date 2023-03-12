@@ -216,13 +216,13 @@ if __name__ == "__main__":
                 thermostat_savings * kwh_comsumption * money_converter) + " per month in doing this. \n")
     # Washer & Dryer
     washer_savings_m= washerS * money_converter
-    washer_savings_money = "%.2f" & washer_savings_m
+    washer_savings_money = "%.2f" % washer_savings_m
     if washerY == "was not":
         st.write(
             "Your washer was not energy star rated. If you were to make this energy star rated, you will save " + str(
                 washerS) + " kwh per month and $" + str(washer_savings_money))
     dryer_savings_m = dryerS * money_converter
-    dryer_savings_money = "%.2f" & washer_savings_m
+    dryer_savings_money = "%.2f" % dryer_savings_m
     if dryerY == "was not":
         st.write(
             "Your dryer was not energy star rated. If you were to make this energy star rated, you will save " + str(
