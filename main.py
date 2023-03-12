@@ -193,12 +193,12 @@ if __name__ == "__main__":
     st.write("Your individualized report is as follows:\n")
     if kwhsaved >= 153.33:
         st.write(
-            "There is room to save enough energy in your housesold to buy a electric vehicle! You can save up to " + str(
-                kwhsaved) + " kwh! \n")
+            "There is room to save enough energy in your housesold to buy a electric vehicle! You can save up to " + "%.2f" %
+                kwhsaved + " kwh! \n")
     else:
         st.write(
-            "There is room to save enough energy in your housesold to buy a electric vehicle! You can save up to " + str(
-                kwhsaved) + " kwh! \n")
+            "There is room to save enough energy in your housesold to buy a electric vehicle! You can save up to " + "%.2f" %
+                kwhsaved + " kwh! \n")
 
     # Bulbs
     bulb_savings_string = "%.2f" % bulb_savings
