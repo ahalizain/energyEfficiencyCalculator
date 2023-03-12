@@ -30,11 +30,12 @@ if __name__ == "__main__":
     # Avg or User Input
     # variables for kWh will be appliancekWh and vars for hours/month will be appliance_hPm
     st.write(
-        "For these next few questions, I will ask you  the energy rating and hours per month for a select few appliances. You have a choice to either write in the exact amount of time or kWh for the appliances, or, we will use an average amount of the appliances if you wish not to enter the amount.\n Note: If you selected Average, then skip the question after. If you select Actual, then enter in your average input. Only reply your answers to non-energy star rated appliances in your home.")
+        "For these next few questions, I will ask you the energy rating & hours per month usage for the non-energy efficient appliances that you own. You have a choice to either write in the exact kwh rating of the appliance and the exact hours of usage per month or select the option "average" from the drop-down menu where we will use an average value of kwh rating of the appliance and average usage per month.\n")
+    st.write("Note: if you selected average for energy rating and hours of usage per month, then skip the next question. Only reply to the appliances that are not energy efficient in your house.")
     # Oven/Stovetop
     # Oven/Stovetopkwhhpm
     ovenStoveTop_input = st.selectbox(
-        "Would you like your energy rating for your Oven/Stovetop an Average value or your actual value?",
+        "Would you like your energy rating for your Oven/Stovetop an Average value or an actual value?",
         ["Actual", "Average"])
     userOvenkWh = st.number_input(
         "Please enter in the kWh/energy rating for your oven/stovetop(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -46,7 +47,7 @@ if __name__ == "__main__":
         ovenkWh = 2350.00
 
     ovenStoveTop_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Oven/Stovetop an Average value or your actual value?",
+        "Would you like your hours per month for your Oven/Stovetop an Average value or an actual value?",
         ["Actual", "Average"])
     userOvenhPm = st.number_input(
         "Please enter in the hours per month for your oven/stovetop(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -57,7 +58,7 @@ if __name__ == "__main__":
 
     # Washerkwhhpm
     washer_input = st.selectbox(
-        "Would you like your energy rating for your Washer an Average value or your actual value?",
+        "Would you like your energy rating for your Washer an Average value or an actual value?",
         ["Actual", "Average"])
     userwasherkWh = st.number_input(
         "Please enter in the kWh/energy rating for your washer(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     else:
         washerkWh = 2000
     washer_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Washer an Average value or your actual value?",
+        "Would you like your hours per month for your Washer an Average value or an actual value?",
         ["Actual", "Average"])
     userwasherhPm = st.number_input(
         "Please enter in the hours per month for your washer(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -77,7 +78,7 @@ if __name__ == "__main__":
     else:
         washerhPm = 24
     # Dryerkwhhpm
-    dryer_input = st.selectbox("Would you like your energy rating for your Dryer an Average value or your actual value?",
+    dryer_input = st.selectbox("Would you like your energy rating for your Dryer an Average value or an actual value?",
                                ["Actual", "Average"])
     userdryerkWh = st.number_input(
         "Please enter in the kWh/energy rating for your dryer(ONLY OF YOU SELECTED 'ACTUAL'): ")
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     else:
         dryerkWh = 2800
     dryer_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Dryer an Average value or your actual value?",
+        "Would you like your hours per month for your Dryer an Average value or an actual value?",
         ["Actual", "Average"])
     userdryerhPm = st.number_input(
         "Please enter in the hours per month for your dryer(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     # FridgekWhHPm
 
     refridgerator_input = st.selectbox(
-        "Would you like your energy rating for your Fridge an Average value or your actual value?",
+        "Would you like your energy rating for your Fridge an Average value or an actual value?",
         ["Average", "Actual"])
     userrefridgeratorkWh = st.number_input(
         "Please enter in the kWh/energy rating for your refridgerator(ONLY OF YOU SELECTED 'ACTUAL'): ")
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     else:
         refridgeratorkWh = 2000
     refridgerator_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Fridge an Average value or your actual value?",
+        "Would you like your hours per month for your Fridge an Average value or an actual value?",
         ["Average", "Actual"])
     userrefridgeratorhPm = st.number_input(
         "Please enter in the hours per month for your refridgerator(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -154,8 +155,8 @@ if __name__ == "__main__":
     if thermostat == "No":
         thermostatY = "was not"
     # Washer/Dryer(if statements)
-    washerS += washerkWh * energy_star_savings
-    dryerS += dryerkWh * energy_star_savings
+    washerS += washerkWh*washerhPm/1000 * energy_star_savings
+    dryerS += dryerkWh*dryerhPm/1000 * energy_star_savings
     if dryer == "Yes":
         dryerY = "was"
     if washer == "Yes":
@@ -168,26 +169,26 @@ if __name__ == "__main__":
         num_notEnergyStar += 1
         kwhsaved += 25.20
         dryerY = "was not"
-    washerdryerS = washerS + dryerS
-    washerdryer_totalS = dryerkWh - dryerS + washerkWh - washerS
+    #washerdryerS = washerS + dryerS
+    #washerdryer_totalS = dryerkWh - dryerS + washerkWh - washerS
     # Oven/Stovetop(if statements)
-    oven_stovetopS += ovenkWh * energy_star_savings
+    oven_stovetopS += ovenkWh*ovenhPm/1000 * energy_star_savings
     if oven_stovetop == "No":
         kwhsaved += 17.63
         ovenStovetopY = "was not"
         num_notEnergyStar += 1
     if oven_stovetop == "Yes":
         ovenStovetopY = "was"
-    oven_totalS = ovenkWh - oven_stovetopS
+    #oven_totalS = ovenkWh - oven_stovetopS
     # Fridge(if statements)
-    refridgeratorS = refridgeratorkWh * energy_star_savings
+    refridgeratorS = refridgeratorkWh *refridgeratorhPm/1000* energy_star_savings
     if refridgerator == "No":
         kwhsaved += 17.82
         refridgeratorY = "was not"
         num_notEnergyStar += 1
     if refridgerator == "Yes":
         refridgeratorY = "was"
-    refridgerator_totalS = refridgeratorkWh - refridgeratorS
+    #refridgerator_totalS = refridgeratorkWh - refridgeratorS
 
     # Results
     st.write("Your individualized report is as follows:\n")
