@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # Avg or User Input
     # variables for kWh will be appliancekWh and vars for hours/month will be appliance_hPm
     st.write(
-        "For these next few questions, I will ask you the energy rating & hours per month usage for the non-energy efficient appliances that you own. You have a choice to either write in the exact kwh rating of the appliance and the exact hours of usage per month or select the option "average" from the drop-down menu where we will use an average value of kwh rating of the appliance and average usage per month.\n")
+        "For these next few questions, I will ask you the energy rating & hours per month usage for the non-energy efficient appliances that you own. You have a choice to either write in the exact kwh rating of the appliance and the exact hours of usage per month or select the option 'average' from the drop-down menu where we will use an average value of kwh rating of the appliance and average usage per month.\n")
     st.write("Note: if you selected average for energy rating and hours of usage per month, then skip the next question. Only reply to the appliances that are not energy efficient in your house.")
     # Oven/Stovetop
     # Oven/Stovetopkwhhpm
