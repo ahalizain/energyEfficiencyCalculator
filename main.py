@@ -204,8 +204,8 @@ if __name__ == "__main__":
     bulb_savings_string = "%.2f" % bulb_savings
     bulb_savings_money  = "%.2f" % bulb_savings*money_converter
     st.write("You currently have " + str(
-        num_conv_bulb) + " conventional bulbs in your home. If you were to switch to LED Bulbs, then you would save " + "%.2f" % bulb_savings + " kwh in your household just by switching to LED bulbs. You would save $" + "%.2f" %
-        bulb_savings_money + " on doing this action.")
+        num_conv_bulb) + " conventional bulbs in your home. If you were to switch to LED Bulbs, then you would save " + "%.2f" % bulb_savings + " kwh in your household just by switching to LED bulbs. You would save $" +
+        str(bulb_savings_money) + " on doing this action.")
     # Smart Thermostat
     if thermostatY == "was not":
         st.write(
