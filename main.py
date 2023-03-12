@@ -30,11 +30,11 @@ if __name__ == "__main__":
     # Avg or User Input
     # variables for kWh will be appliancekWh and vars for hours/month will be appliance_hPm
     st.write(
-        "For these next few questions, I will ask you  the energy rating and hours per month for a select few appliances. You have a choice to either write in the exact amount of time or kWh for the appliances, or, we will use an average amount of the appliances if you wish not to enter the amount.\n Note: If you selected Actual, then skip the question after. If you select Average, then enter in your average input. Only reply your answers to non-energy star rated appliances in your home.")
+        "For these next few questions, I will ask you  the energy rating and hours per month for a select few appliances. You have a choice to either write in the exact amount of time or kWh for the appliances, or, we will use an average amount of the appliances if you wish not to enter the amount.\n Note: If you selected Average, then skip the question after. If you select Actual, then enter in your average input. Only reply your answers to non-energy star rated appliances in your home.")
     # Oven/Stovetop
     # Oven/Stovetopkwhhpm
     ovenStoveTop_input = st.selectbox(
-        "Would you like your energy rating for your Oven/Stovetop a Average value or your actual value?",
+        "Would you like your energy rating for your Oven/Stovetop an Average value or your actual value?",
         ["Actual", "Average"])
     userOvenkWh = st.number_input(
         "Please enter in the kWh/energy rating for your oven/stovetop(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         ovenkWh = 2350.00
 
     ovenStoveTop_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Oven/Stovetop a Average value or your actual value?",
+        "Would you like your hours per month for your Oven/Stovetop an Average value or your actual value?",
         ["Actual", "Average"])
     userOvenhPm = st.number_input(
         "Please enter in the hours per month for your oven/stovetop(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # Washerkwhhpm
     washer_input = st.selectbox(
-        "Would you like your energy rating for your Washer a Average value or your actual value?",
+        "Would you like your energy rating for your Washer an Average value or your actual value?",
         ["Actual", "Average"])
     userwasherkWh = st.number_input(
         "Please enter in the kWh/energy rating for your washer(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     else:
         washerkWh = 2000
     washer_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Washer a Average value or your actual value?",
+        "Would you like your hours per month for your Washer an Average value or your actual value?",
         ["Actual", "Average"])
     userwasherhPm = st.number_input(
         "Please enter in the hours per month for your washer(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     else:
         washerhPm = 24
     # Dryerkwhhpm
-    dryer_input = st.selectbox("Would you like your energy rating for your Dryer a Average value or your actual value?",
+    dryer_input = st.selectbox("Would you like your energy rating for your Dryer an Average value or your actual value?",
                                ["Actual", "Average"])
     userdryerkWh = st.number_input(
         "Please enter in the kWh/energy rating for your dryer(ONLY OF YOU SELECTED 'ACTUAL'): ")
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     else:
         dryerkWh = 2800
     dryer_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Dryer a Average value or your actual value?",
+        "Would you like your hours per month for your Dryer an Average value or your actual value?",
         ["Actual", "Average"])
     userdryerhPm = st.number_input(
         "Please enter in the hours per month for your dryer(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     # FridgekWhHPm
 
     refridgerator_input = st.selectbox(
-        "Would you like your energy rating for your Fridge a Average value or your actual value?",
+        "Would you like your energy rating for your Fridge an Average value or your actual value?",
         ["Average", "Actual"])
     userrefridgeratorkWh = st.number_input(
         "Please enter in the kWh/energy rating for your refridgerator(ONLY OF YOU SELECTED 'ACTUAL'): ")
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     else:
         refridgeratorkWh = 2000
     refridgerator_input_hPm = st.selectbox(
-        "Would you like your hours per month for your Fridge a Average value or your actual value?",
+        "Would you like your hours per month for your Fridge an Average value or your actual value?",
         ["Average", "Actual"])
     userrefridgeratorhPm = st.number_input(
         "Please enter in the hours per month for your refridgerator(ONLY IF YOU SELECTED 'ACTUAL'): ")
@@ -203,7 +203,7 @@ if __name__ == "__main__":
     # Bulbs
     bulb_savings_string = "%.2f" % bulb_savings
     st.write("You currently have " + str(
-        num_conv_bulb) + " conventional bulbs in your home. If you were to switch to LED Bulbs, then you would save " + "%.2f" % bulb_savings + " kwh in your household just by switching to LED bulbs. You would save $" + str(
+        num_conv_bulb) + " conventional bulbs in your home. If you were to switch to LED Bulbs, then you would save " + "%.2f" % bulb_savings + " kwh in your household just by switching to LED bulbs. You would save $" + str("%.2f" %
         bulb_savings * money_converter) + " on doing this action.")
     # Smart Thermostat
     if thermostatY == "was not":
