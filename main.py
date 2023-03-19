@@ -241,11 +241,14 @@ if __name__ == "__main__":
         st.write("Your oven/stovetop was not energy star rated. To make this energy star rated, you will save " + "%.2f" %
             oven_stovetopS + " kwh per month and $" + str(oven_savings_money))
     # Windows
+    windowsS = windows_savings * kwh_consumption
+    windows_money = windows_savings * kwh_comsumption * money_converter
+    windows_money_m = "%.2f" % windows_money
     if windowsY == "was not":
         st.write(
-            "You do not have energy efficient windows installed in your home. If you do install one, then you will save 12% of your total kwh energy consumtion for the month, which is " + str(
-                windows_savings * kwh_comsumption) + " kwh per month. You will also save $" + str(
-                windows_savings * kwh_comsumption * money_converter) + " per month in doing this. \n")
+            "You do not have energy efficient windows installed in your home. If you do install one, then you will save 12% of your total kwh energy consumtion for the month, which is " + "%.2f" %
+                 windowsS + " kwh per month. You will also save $" + str(
+                windows_money_m) + " per month in doing this. \n")
 
 st.write(
     "I hope this helps you save energy. None of your answers are stored and you are the only person able to see these results.\n")
