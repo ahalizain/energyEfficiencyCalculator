@@ -241,7 +241,7 @@ if __name__ == "__main__":
         st.write("Your oven/stovetop was not energy star rated. To make this energy star rated, you will save " + "%.2f" %
             oven_stovetopS + " kwh per month and $" + str(oven_savings_money))
     # Windows
-    windowsS = windows_savings * kwh_consumption
+    windowsS = windows_savings * kwh_comsumption
     windows_money = windowsS * money_converter
     windows_money_m = "%.2f" % windows_money
     if windowsY == "was not":
