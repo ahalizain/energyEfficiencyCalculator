@@ -5,6 +5,8 @@ import streamlit as st
 if __name__ == "__main__":
     # title and description of website
     st.title("Energy Efficiency Calculator")
+    st.write("An easy, user-friendly application created by Zain Ahmad \n")
+    
     st.write("This will calculate your energy savings using some questions. Results will be immediately shown.")
 
     # Fields(aka Questions for the webapp)
