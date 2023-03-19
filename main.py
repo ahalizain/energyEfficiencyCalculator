@@ -242,7 +242,7 @@ if __name__ == "__main__":
             oven_stovetopS + " kwh per month and $" + str(oven_savings_money))
     # Windows
     windowsS = windows_savings * kwh_consumption
-    windows_money = windows_savings * kwh_comsumption * money_converter
+    windows_money = windowsS * money_converter
     windows_money_m = "%.2f" % windows_money
     if windowsY == "was not":
         st.write(
