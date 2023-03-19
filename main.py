@@ -23,7 +23,7 @@ if __name__ == "__main__":
     air_conditioning = st.selectbox("Does your home use electricity for air conditioning?", ["Yes", "No"])
     hot_water = st.selectbox("Does your house use electricity for hot water?", ["Yes", "No"])
     st.write("Which of the following appliances are energy efficient? (Energy Star)")
-    oven_stovetop = st.selectbox("Oven/Stovetop", ["No", "Yes"])
+    oven_stovetop = st.selectbox("Oven/Stovetop", ["Yes", "No"])
     washer = st.selectbox("Washer", ["Yes", "No"])
     dryer = st.selectbox("Dryer", ["Yes", "No"])
     refridgerator = st.selectbox("Refridgerator", ["Yes", "No"])
@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
     refridgerator_input = st.selectbox(
         "Would you like your energy rating for your Fridge an Average value or an actual value?",
-        ["Average", "Actual"])
+        ["Actual", "Average"])
     userrefridgeratorkWh = st.number_input(
         "Please enter in the kWh/energy rating for your refridgerator(ONLY OF YOU SELECTED 'ACTUAL'): ")
     if refridgerator_input == "Actual":
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         refridgeratorkWh = 2000
     refridgerator_input_hPm = st.selectbox(
         "Would you like your hours per month for your Fridge an Average value or an actual value?",
-        ["Average", "Actual"])
+        ["Actual", "Average"])
     userrefridgeratorhPm = st.number_input(
         "Please enter in the hours per month for your refridgerator(ONLY IF YOU SELECTED 'ACTUAL'): ")
     if refridgerator_input_hPm == "Actual":
