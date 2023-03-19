@@ -219,8 +219,8 @@ if __name__ == "__main__":
     washer_savings_money = "%.2f" % washer_savings_m
     if washerY == "was not":
         st.write(
-            "Your washer was not energy star rated. If you were to make this energy star rated, you will save " + str(
-                washerS) + " kwh per month and $" + str(washer_savings_money))
+            "Your washer was not energy star rated. If you were to make this energy star rated, you will save " + "%.2f" %
+                washerS + " kwh per month and $" + str(washer_savings_money))
     dryer_savings_m = dryerS * money_converter
     dryer_savings_money = "%.2f" % dryer_savings_m
     if dryerY == "was not":
@@ -229,7 +229,7 @@ if __name__ == "__main__":
                 dryerS) + " kwh per month and $" + str(dryer_savings_money))
     if refridgeratorY == "was not":
         st.write(
-            "Your refridgerator was not energy star rated. If you were to make this energy star rated, you will save " + str(
+            "Your refridgerator was not energy star rated. If you 5were to make this energy star rated, you will save " + str(
                 refridgeratorS) + " kwh per month and $" + str(refridgeratorS * money_converter))
     if ovenStovetopY == "was not":
         st.write("Your oven/stovetop was not energy star rated. To make this energy star rated, you will save " + str(
