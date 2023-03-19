@@ -23,7 +23,7 @@ if __name__ == "__main__":
     air_conditioning = st.selectbox("Does your home use electricity for air conditioning?", ["Yes", "No"])
     hot_water = st.selectbox("Does your house use electricity for hot water?", ["Yes", "No"])
     st.write("Which of the following appliances are energy efficient? (Energy Star)")
-    oven_stovetop = st.selectbox("Oven/Stovetop", ["Yes", "No"])
+    oven_stovetop = st.selectbox("Oven/Stovetop", ["No", "Yes"])
     washer = st.selectbox("Washer", ["Yes", "No"])
     dryer = st.selectbox("Dryer", ["Yes", "No"])
     refridgerator = st.selectbox("Refridgerator", ["Yes", "No"])
@@ -237,7 +237,7 @@ if __name__ == "__main__":
     # Windows
     if windowsY == "was not":
         st.write(
-            "You do not have windows installed in your home. If you do install one, then you will save 12% of your total kwh energy consumtion for the month, which is " + str(
+            "You do not have energy efficient windows installed in your home. If you do install one, then you will save 12% of your total kwh energy consumtion for the month, which is " + str(
                 windows_savings * kwh_comsumption) + " kwh per month. You will also save $" + str(
                 windows_savings * kwh_comsumption * money_converter) + " per month in doing this. \n")
 
@@ -248,4 +248,4 @@ st.write("Have a nice day!")
 # WHATS DONE SO FAR:
 # oven/stovetop
 # fridge
-# washer/dryerr
+# washer/dryer
