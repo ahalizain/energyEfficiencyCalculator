@@ -145,14 +145,14 @@ if __name__ == "__main__":
     refridgeratorS = 0
     # If statements
     if windows_replacement == "Yes":
-        #kwhsaved += 113.40
         windowsY = "was"
     if windows_replacement == "No":
+        kwhsaved += 113.40
         windowsY = "was not"
     if thermostat == "Yes":
-        #kwhsaved += 103.95
         thermostatY = "was"
     if thermostat == "No":
+        kwhsaved += 103.95
         thermostatY = "was not"
     # Washer/Dryer(if statements)
     washerS += washerkWh*washerhPm/1000 * energy_star_savings
@@ -162,19 +162,19 @@ if __name__ == "__main__":
     if washer == "Yes":
         washerY = "was"
     if washer == "No":
-        #kwhsaved += 14.40
+        kwhsaved += 14.40
         num_notEnergyStar += 1
         washerY = "was not"
     if dryer == "No":
         num_notEnergyStar += 1
-        #kwhsaved += 25.20
+        kwhsaved += 25.20
         dryerY = "was not"
     #washerdryerS = washerS + dryerS
     #washerdryer_totalS = dryerkWh - dryerS + washerkWh - washerS
     # Oven/Stovetop(if statements)
     oven_stovetopS += ovenkWh*ovenhPm/1000 * energy_star_savings
     if oven_stovetop == "No":
-        #kwhsaved += 17.63
+        kwhsaved += 17.63
         ovenStovetopY = "was not"
         num_notEnergyStar += 1
     if oven_stovetop == "Yes":
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     # Fridge(if statements)
     refridgeratorS = refridgeratorkWh *refridgeratorhPm/1000* energy_star_savings
     if refridgerator == "No":
-        #kwhsaved += 17.82
+        kwhsaved += 17.82
         refridgeratorY = "was not"
         num_notEnergyStar += 1
     if refridgerator == "Yes":
@@ -194,11 +194,11 @@ if __name__ == "__main__":
     st.write("Your individualized report is as follows:\n")
     if kwhsaved >= 153.33:
         st.write(
-            "There is room to save enough energy in your housesold to buy a electric vehicle! You can save up to " + "%.2f" %
+            "There is room to save enough energy in your housesold to buy a electric vehicle! You have potential to save " + "%.2f" %
                 kwhsaved + " kwh! \n")
     else:
         st.write(
-            "There is room to save enough energy in your housesold to buy a electric vehicle! You can save up to " + "%.2f" %
+            "There is not enough room to save energy in your housesold to buy a electric vehicle. You have potential to save up to " + "%.2f" %
                 kwhsaved + " kwh! \n")
 
     # Bulbs
