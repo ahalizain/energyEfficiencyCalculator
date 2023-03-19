@@ -225,15 +225,19 @@ if __name__ == "__main__":
     dryer_savings_money = "%.2f" % dryer_savings_m
     if dryerY == "was not":
         st.write(
-            "Your dryer was not energy star rated. If you were to make this energy star rated, you will save " + str(
-                dryerS) + " kwh per month and $" + str(dryer_savings_money))
+            "Your dryer was not energy star rated. If you were to make this energy star rated, you will save " + "%.2f" %
+                dryerS + " kwh per month and $" + str(dryer_savings_money))
+    refridgerator_savings_m = refridgeratorS * money_converter
+    refridgerator_savings_money = "%.2f" % refridgerator_savings_m
     if refridgeratorY == "was not":
         st.write(
-            "Your refridgerator was not energy star rated. If you 5were to make this energy star rated, you will save " + str(
-                refridgeratorS) + " kwh per month and $" + str(refridgeratorS * money_converter))
+            "Your refridgerator was not energy star rated. If you 5were to make this energy star rated, you will save " + "%.2f" %
+                refridgeratorS + " kwh per month and $" + str(refridgerator_savings_money))
+    oven_savings_m = oven_stovetopS * money_converter
+    oven_savings_money = "%.2f" % oven_savings_m
     if ovenStovetopY == "was not":
-        st.write("Your oven/stovetop was not energy star rated. To make this energy star rated, you will save " + str(
-            oven_stovetopS) + " kwh per month and $" + str(oven_stovetopS * money_converter))
+        st.write("Your oven/stovetop was not energy star rated. To make this energy star rated, you will save " + "%.2f" %
+            oven_stovetopS + " kwh per month and $" + str(oven_savings_money))
     # Windows
     if windowsY == "was not":
         st.write(
