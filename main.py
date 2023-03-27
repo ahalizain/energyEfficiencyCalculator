@@ -217,8 +217,8 @@ if __name__ == "__main__":
     if thermostatY == "was not":
         st.write(
             "You do not have a smart thermostat installed in your home. If you do switch to using one, then you will save 11% of about half of your total kwh energy consumtion for the month, which is " + str(
-                thermo_savings_string) + " kwh per month. You will also save $" + str(
-                thermo_savings_money * kwh_comsumption * money_converter) + " per month in doing this. \n")
+                thermo_savings_string*kwh_consumption) + " kwh per month. You will also save $" + str(
+                thermo_savings_money * kwh_comsumption) + " per month in doing this. \n")
     # Washer & Dryer
     washer_savings_m= washerS * money_converter
     washer_savings_money = "%.2f" % washer_savings_m
