@@ -211,11 +211,14 @@ if __name__ == "__main__":
         num_conv_bulb) + " conventional bulbs in your home. If you were to switch to LED Bulbs, then you would save " + "%.2f" % bulb_savings + " kwh in your household just by switching to LED bulbs. You would save $" +
         str(bulb_savings_money) + " on doing this action.")
     # Smart Thermostat
+    thermo_savings_string = "%.2f" % thermostat_savings
+    thermo_savings_m = thermostat_savings*money_converter
+    thermo_savings_money  = "%.2f" % thermo_savings_m
     if thermostatY == "was not":
         st.write(
-            "You do not have a smart thermostat installed in your home. If you do switch to using one, then you will save 11% of your total kwh energy consumtion for the month, which is " + str(
-                thermostat_savings * kwh_comsumption) + " kwh per month. You will also save $" + str(
-                thermostat_savings * kwh_comsumption * money_converter) + " per month in doing this. \n")
+            "You do not have a smart thermostat installed in your home. If you do switch to using one, then you will save 11% of about half of your total kwh energy consumtion for the month, which is " + str(
+                thermo_savings_string) + " kwh per month. You will also save $" + str(
+                thermo_savings_money * kwh_comsumption * money_converter) + " per month in doing this. \n")
     # Washer & Dryer
     washer_savings_m= washerS * money_converter
     washer_savings_money = "%.2f" % washer_savings_m
