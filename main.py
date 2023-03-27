@@ -139,8 +139,8 @@ if __name__ == "__main__":
     num_notEnergyStar = 0
     energy_star_savings = 0.3
     money_converter = 0.20
-    thermostat_savings = 0.11
-    windows_savings = 0.12
+    thermostat_savings = 0.11*0.53
+    windows_savings = 0.12*0.53
     washerS = 0
     dryerS = 0
     oven_stovetopS = 0
