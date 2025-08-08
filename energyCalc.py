@@ -1,295 +1,140 @@
 import streamlit as st
 import time
-# command to run: py -m streamlit run main.py
-#
+import plotly.express as px  # For interactive charts
+
 if __name__ == "__main__":
-    # title and description of website
     st.title("Energy Efficiency Calculator")
-    st.subheader("An easy, user-friendly application created by Zain Ahmad \n")
-    st.subheader("This will calculate your energy savings using some questions.\n")
-    st.subheader("Staring off with general questions about your home!")
+    st.subheader("An easy, user-friendly application created by Zain Ahmad")
+    st.subheader("This will calculate your energy savings using some questions.")
+    st.subheader("You will need your energy bill handy for some of the questions presented.")
 
-
-    # Fields(aka Questions for the webapp)
-
-    ##################### FIRST SET OF QUESTIONS: GENERAL INFO
-    house_area = st.number_input("Enter square footage of the house")
-    kwh_comsumption = st.number_input(
-        "What is the average total monthly energy consumption in your house in Kilowatt Hour(KWH)?")
-
-    dollar_kwh_comsumption = st.number_input("What is the average total monthly energy cost in your house, in dollars?")
-    windows_replacement = st.selectbox(
-        "Have the windows in your house been replaced with high efficiency ones in the last 15yrs?", ["Yes", "No"])
-    num_conv_bulb = st.number_input("Enter the number of conventional light bulbs in the house.")
-    num_led_bulb = st.number_input("Enter the number of LED lightbulbs in the house.")
-    thermostat = st.selectbox("Do you have learning thermostat in the house?(Google Nest or Ecobee are examples)",
-                              ["Yes", "No"])
+    st.header("General Information About Your Home")
+    house_area = st.number_input("Enter square footage of the house", min_value=0)
+    kwh_consumption = st.number_input("What is the average total monthly energy consumption in your house in Kilowatt Hour (kWh)?", min_value=0.0)
+    dollar_kwh_consumption = st.number_input("What is the average total monthly energy cost in your house, in dollars?", min_value=0.0)
+    windows_replacement = st.selectbox("Have the windows in your house been replaced with high efficiency ones in the last 15 years?", ["Yes", "No"])
+    num_conv_bulb = st.number_input("Enter the number of conventional light bulbs in the house.", min_value=0)
+    num_led_bulb = st.number_input("Enter the number of LED lightbulbs in the house.", min_value=0)
+    thermostat = st.selectbox("Do you have a learning thermostat in the house? (Google Nest or Ecobee are examples)", ["Yes", "No"])
     heating = st.selectbox("Does your home use electricity for heating?", ["Yes", "No"])
     air_conditioning = st.selectbox("Does your home use electricity for air conditioning?", ["Yes", "No"])
     hot_water = st.selectbox("Does your house use electricity for hot water?", ["Yes", "No"])
+
+    st.header("Energy Efficient Appliances")
     st.write("Which of the following appliances are energy efficient? (Energy Star)")
     oven_stovetop = st.selectbox("Oven/Stovetop", ["Yes", "No"])
     washer = st.selectbox("Washer", ["Yes", "No"])
     dryer = st.selectbox("Dryer", ["Yes", "No"])
-    refridgerator = st.selectbox("Refridgerator", ["Yes", "No"])
-    ################# LOADING BAR: END OF THIS SET OF QUESTIONS
-    st.subheader("Would you like to confirm your answers for this section?")
-    confirmAnswerBox1 = st.checkbox("Confirm")
-    if confirmAnswerBox1:
-        bar1 = st.progress(25)
-        time.sleep(1)
-        bar1.progress(50)
-        time.sleep(1)
-        bar1.progress(65)
-        time.sleep(1)
-        bar1.progress(75)
-        time.sleep(1)
-        bar1.progress(95)
-        time.sleep(1.5)
-        bar1.progress(100)
-        ################# NEXT SET OF QUESTIONS: AVG OR USER INPUT FOR APPLIANCES
-        # Avg or User Input
-        # variables for kWh will be appliancekWh and vars for hours/month will be appliance_hPm
-        st.subheader(
-            "For these next few questions, I will ask you the energy rating & hours per month usage for the non-energy efficient appliances that you own.\n")
-        st.subheader("You have a choice to either write in the exact kwh rating of the appliance and the exact hours of usage per month or select the option 'average' from the drop-down menu where we will use an average value of kwh rating of the appliance and average usage per month.\n")
-        st.subheader("Note: if you selected average for energy rating and hours of usage per month, then skip the next question. Only reply to the appliances that are not energy efficient in your house.")
-        # Oven/Stovetop
-        # Oven/Stovetopkwhhpm
-        st.write("Oven/Stovetop Information")
-        ovenStoveTop_input = st.selectbox(
-            "Would you like your energy rating for your Oven/Stovetop an Average value or an actual value?",
-            ["Actual", "Average"])
-        userOvenkWh = st.number_input(
-            "Please enter in the kWh/energy rating for your oven/stovetop(ONLY IF YOU SELECTED 'ACTUAL'): ")
-        if ovenStoveTop_input == "Actual":
+    refrigerator = st.selectbox("Refrigerator", ["Yes", "No"])
 
-            ovenkWh = userOvenkWh
+    confirm1 = st.checkbox("Confirm answers for this section")
+    if confirm1:
+        bar1 = st.progress(0)
+        for p in [25,50,65,75,95,100]:
+            time.sleep(0.5)
+            bar1.progress(p)
 
-        else:
-            ovenkWh = 2350.00
+        st.header("Detailed Appliance Information")
+        oven_power_mode = st.selectbox("Energy rating mode for Oven/Stovetop", ["Actual","Average"])
+        oven_watts = st.number_input("Enter Oven/Stovetop power (watts)", min_value=0.0) if oven_power_mode=="Actual" else 2350.0
+        oven_usage_mode = st.selectbox("Usage mode for Oven/Stovetop (hours/month)", ["Actual","Average"])
+        oven_hours = st.number_input("Enter Oven/Stovetop usage (hours/month)", min_value=0.0) if oven_usage_mode=="Actual" else 25
 
-        ovenStoveTop_input_hPm = st.selectbox(
-            "Would you like your hours per month for your Oven/Stovetop an Average value or an actual value?",
-            ["Actual", "Average"])
-        userOvenhPm = st.number_input(
-            "Please enter in the hours per month for your oven/stovetop(ONLY IF YOU SELECTED 'ACTUAL'): ")
-        if ovenStoveTop_input_hPm == "Actual":
-            ovenhPm = userOvenhPm
-        else:
-            ovenhPm = 25
+        washer_power_mode = st.selectbox("Energy rating mode for Washer", ["Actual","Average"])
+        washer_watts = st.number_input("Enter Washer power (watts)", min_value=0.0) if washer_power_mode=="Actual" else 2000.0
+        washer_usage_mode = st.selectbox("Usage mode for Washer (hours/month)", ["Actual","Average"])
+        washer_hours = st.number_input("Enter Washer usage (hours/month)", min_value=0.0) if washer_usage_mode=="Actual" else 24
 
-        # Washerkwhhpm
-        st.write("Washer Information")
-        washer_input = st.selectbox(
-            "Would you like your energy rating for your Washer an Average value or an actual value?",
-            ["Actual", "Average"])
-        userwasherkWh = st.number_input(
-            "Please enter in the kWh/energy rating for your washer(ONLY IF YOU SELECTED 'ACTUAL'): ")
-        if washer_input == "Actual":
+        dryer_power_mode = st.selectbox("Energy rating mode for Dryer", ["Actual","Average"])
+        dryer_watts = st.number_input("Enter Dryer power (watts)", min_value=0.0) if dryer_power_mode=="Actual" else 2800.0
+        dryer_usage_mode = st.selectbox("Usage mode for Dryer (hours/month)", ["Actual","Average"])
+        dryer_hours = st.number_input("Enter Dryer usage (hours/month)", min_value=0.0) if dryer_usage_mode=="Actual" else 30
 
-            washerkWh = userwasherkWh
+        refrigerator_power_mode = st.selectbox("Energy rating mode for Refrigerator", ["Actual","Average"])
+        refrigerator_watts = st.number_input("Enter Refrigerator power (watts)", min_value=0.0) if refrigerator_power_mode=="Actual" else 2000.0
+        refrigerator_usage_mode = st.selectbox("Usage mode for Refrigerator (hours/month)", ["Actual","Average"])
+        refrigerator_hours = st.number_input("Enter Refrigerator usage (hours/month)", min_value=0.0) if refrigerator_usage_mode=="Actual" else 24
 
-        else:
-            washerkWh = 2000
-        washer_input_hPm = st.selectbox(
-            "Would you like your hours per month for your Washer an Average value or an actual value?",
-            ["Actual", "Average"])
-        userwasherhPm = st.number_input(
-            "Please enter in the hours per month for your washer(ONLY IF YOU SELECTED 'ACTUAL'): ")
-        if washer_input_hPm == "Actual":
-            washerhPm = userwasherhPm
-        else:
-            washerhPm = 24
-        # Dryerkwhhpm
-        st.write("Dryer Information")
-        dryer_input = st.selectbox("Would you like your energy rating for your Dryer an Average value or an actual value?",
-                                ["Actual", "Average"])
-        userdryerkWh = st.number_input(
-            "Please enter in the kWh/energy rating for your dryer(ONLY OF YOU SELECTED 'ACTUAL'): ")
-        if dryer_input == "Actual":
+        st.header("Additional Questions")
+        ev = st.selectbox("Do you currently own an electric vehicle?", ["Yes","No"])
 
-            dryerkWh = userdryerkWh
+        confirm2 = st.checkbox("Confirm all inputs and calculate results")
+        if confirm2:
+            bar2 = st.progress(0)
+            for p in [20,50,75,100]:
+                time.sleep(0.5)
+                bar2.progress(p)
 
-        else:
-            dryerkWh = 2800
-        dryer_input_hPm = st.selectbox(
-            "Would you like your hours per month for your Dryer an Average value or an actual value?",
-            ["Actual", "Average"])
-        userdryerhPm = st.number_input(
-            "Please enter in the hours per month for your dryer(ONLY IF YOU SELECTED 'ACTUAL'): ")
-        if dryer_input_hPm == "Actual":
-            dryerhPm = userdryerhPm
-        else:
-            dryerhPm = 30
-        # FridgekWhHPm
-        st.write("Refridgerator Information")
-        refridgerator_input = st.selectbox(
-            "Would you like your energy rating for your Fridge an Average value or an actual value?",
-            ["Actual", "Average"])
-        userrefridgeratorkWh = st.number_input(
-            "Please enter in the kWh/energy rating for your refridgerator(ONLY OF YOU SELECTED 'ACTUAL'): ")
-        if refridgerator_input == "Actual":
-
-            refridgeratorkWh = userrefridgeratorkWh
-
-        else:
-            refridgeratorkWh = 2000
-        refridgerator_input_hPm = st.selectbox(
-            "Would you like your hours per month for your Fridge an Average value or an actual value?",
-            ["Actual", "Average"])
-        userrefridgeratorhPm = st.number_input(
-            "Please enter in the hours per month for your refridgerator(ONLY IF YOU SELECTED 'ACTUAL'): ")
-        if refridgerator_input_hPm == "Actual":
-            refridgeratorhPm = userrefridgeratorhPm
-        else:
-            refridgeratorhPm = 24
-        # More Questions:
-        st.write("Extra Questions")
-        ev = st.selectbox("Do you currently own a electric vehicle?", ["Yes", "No"])
-        st.subheader("Would you like to confirm your answers for this section?")
-        confirmAnswerBox2 = st.toggle("Confirm")
-        ################ END OF ALL QUESTIONS
-        if confirmAnswerBox2:
-
-            with st.spinner(text="Great Job! Take a break while we process your results..."):
-                time.sleep(5)
-                st.success("Done!")
-
-            # ALL CALCULATIONS AND NEW VARIABLES
-
-            kwhsaved = 0
-            num_bulb = num_conv_bulb
-            watt_savings = 52
-            hours_per_day = 1.6
-            days_in_a_month = 30
-            watt_to_kwh = 1000
-            bulb_savings = num_bulb * watt_savings * hours_per_day * days_in_a_month / watt_to_kwh
-            kwhsaved += bulb_savings
-            tesla_kwhPm = 153.33
-            num_notEnergyStar = 0
             energy_star_savings = 0.3
-            money_converter = 0.20
             thermostat_savings = 0.11
             windows_savings = 0.12
-            washerS = 0
-            dryerS = 0
-            oven_stovetopS = 0
-            refridgeratorS = 0
-            # If statements
-            if windows_replacement == "Yes":
-                windowsY = "was"
-            if windows_replacement == "No":
-                kwhsaved += 113.40
-                windowsY = "was not"
-            if thermostat == "Yes":
-                thermostatY = "was"
-            if thermostat == "No":
-                kwhsaved += 103.95
-                thermostatY = "was not"
-            # Washer/Dryer(if statements)
-            washerS += washerkWh*washerhPm/1000 * energy_star_savings
-            dryerS += dryerkWh*dryerhPm/1000 * energy_star_savings
-            if dryer == "Yes":
-                dryerY = "was"
-            if washer == "Yes":
-                washerY = "was"
-            if washer == "No":
-                kwhsaved += 14.40
-                num_notEnergyStar += 1
-                washerY = "was not"
-            if dryer == "No":
-                num_notEnergyStar += 1
-                kwhsaved += 25.20
-                dryerY = "was not"
-            #washerdryerS = washerS + dryerS
-            #washerdryer_totalS = dryerkWh - dryerS + washerkWh - washerS
-            # Oven/Stovetop(if statements)
-            oven_stovetopS += ovenkWh*ovenhPm/1000 * energy_star_savings
-            if oven_stovetop == "No":
-                kwhsaved += 17.63
-                ovenStovetopY = "was not"
-                num_notEnergyStar += 1
-            if oven_stovetop == "Yes":
-                ovenStovetopY = "was"
-            #oven_totalS = ovenkWh - oven_stovetopS
-            # Fridge(if statements)
-            refridgeratorS = refridgeratorkWh *refridgeratorhPm/1000* energy_star_savings
-            if refridgerator == "No":
-                kwhsaved += 17.82
-                refridgeratorY = "was not"
-                num_notEnergyStar += 1
-            if refridgerator == "Yes":
-                refridgeratorY = "was"
-            #refridgerator_totalS = refridgeratorkWh - refridgeratorS
+            money_converter = dollar_kwh_consumption / kwh_consumption if kwh_consumption > 0 else 0.20
+            tesla_kwh_pm = 153.33
 
-            # Results
-            st.subheader("Your individualized report is as follows:\n")
-            if kwhsaved >= 153.33:
-                st.write(
-                    "There is room to save enough energy in your housesold to buy a electric vehicle! You have potential to save " + "%.2f" %
-                        kwhsaved + " kwh! \n")
-            else:
-                st.write(
-                    "There is not enough room to save energy in your housesold to buy a electric vehicle. You have potential to save up to " + "%.2f" %
-                        kwhsaved + " kwh! \n")
+            if kwh_consumption == 0:
+                st.warning("Warning: Monthly kWh consumption is zero. Savings calculations may be incomplete.")
 
-            # Bulbs
-            bulb_savings_string = "%.2f" % bulb_savings
-            bulb_savings_m = bulb_savings*money_converter
-            bulb_savings_money  = "%.2f" % bulb_savings_m
-            st.write("You currently have " + str(
-                num_conv_bulb) + " conventional bulbs in your home. If you were to switch to LED Bulbs, then you would save " + "%.2f" % bulb_savings + " kwh in your household just by switching to LED bulbs. You would save $" +
-                str(bulb_savings_money) + " on doing this action.")
-            # Smart Thermostat
-            if thermostatY == "was not":
-                st.write(
-                    "You do not have a smart thermostat installed in your home. If you do switch to using one, then you will save 11% of your total kwh energy consumtion for the month, which is " + str(
-                        thermostat_savings * kwh_comsumption) + " kwh per month. You will also save $" + str(
-                        thermostat_savings * kwh_comsumption * money_converter) + " per month in doing this. \n")
-            # Washer & Dryer
-            washer_savings_m= washerS * money_converter
-            washer_savings_money = "%.2f" % washer_savings_m
-            if washerY == "was not":
-                st.write(
-                    "Your washer was not energy star rated. If you were to make this energy star rated, you will save " + "%.2f" %
-                        washerS + " kwh per month and $" + str(washer_savings_money))
-            dryer_savings_m = dryerS * money_converter
-            dryer_savings_money = "%.2f" % dryer_savings_m
-            if dryerY == "was not":
-                st.write(
-                    "Your dryer was not energy star rated. If you were to make this energy star rated, you will save " + "%.2f" %
-                        dryerS + " kwh per month and $" + str(dryer_savings_money))
-            refridgerator_savings_m = refridgeratorS * money_converter
-            refridgerator_savings_money = "%.2f" % refridgerator_savings_m
-            if refridgeratorY == "was not":
-                st.write(
-                    "Your refridgerator was not energy star rated. If you 5were to make this energy star rated, you will save " + "%.2f" %
-                        refridgeratorS + " kwh per month and $" + str(refridgerator_savings_money))
-            oven_savings_m = oven_stovetopS * money_converter
-            oven_savings_money = "%.2f" % oven_savings_m
-            if ovenStovetopY == "was not":
-                st.write("Your oven/stovetop was not energy star rated. To make this energy star rated, you will save " + "%.2f" %
-                    oven_stovetopS + " kwh per month and $" + str(oven_savings_money))
-            # Windows
-            windowsS = windows_savings * kwh_comsumption
-            windows_money = windowsS * money_converter
-            windows_money_m = "%.2f" % windows_money
-            if windowsY == "was not":
-                st.write(
-                    "You do not have energy efficient windows installed in your home. If you do install one, then you will save 12% of your total kwh energy consumtion for the month, which is " + "%.2f" %
-                        windowsS + " kwh per month. You will also save $" + str(
-                        windows_money_m) + " per month in doing this. \n")
+            bulb_savings = num_conv_bulb * 52 * 1.6 * 30 / 1000
+            thermostat_kwh = thermostat_savings * kwh_consumption if thermostat=="No" and kwh_consumption > 0 else 0
+            windows_kwh = windows_savings * kwh_consumption if windows_replacement=="No" and kwh_consumption > 0 else 0
+            washer_kwh = (washer_watts * washer_hours / 1000 * energy_star_savings) if washer=="No" else 0
+            dryer_kwh = (dryer_watts * dryer_hours / 1000 * energy_star_savings) if dryer=="No" else 0
+            oven_kwh = (oven_watts * oven_hours / 1000 * energy_star_savings) if oven_stovetop=="No" else 0
+            refrigerator_kwh = (refrigerator_watts * refrigerator_hours / 1000 * energy_star_savings) if refrigerator=="No" else 0
+
+            items = {
+                "Bulbs": bulb_savings,
+                "Thermostat": thermostat_kwh,
+                "Windows": windows_kwh,
+                "Washer": washer_kwh,
+                "Dryer": dryer_kwh,
+                "Oven/Stovetop": oven_kwh,
+                "Refrigerator": refrigerator_kwh
+            }
+            total_kwh_saved = sum(items.values())
+            total_money_saved = total_kwh_saved * money_converter
+
+            st.header("Your Individualized Report")
+            st.write(f"You have potential to save **{total_kwh_saved:.2f} kWh** and **${total_money_saved:.2f}** per month!")
+            
+            # --- ADDED VISUALIZATIONS ---
+            if total_kwh_saved > 0:
+                # 1. Savings Breakdown Bar Chart
+                st.subheader("Savings Breakdown (kWh)")
+                st.bar_chart(
+                    {k: v for k, v in items.items() if v > 0},
+                    color="#4CAF50"  # Green for energy savings
+                )
+                
+                # 2. Money Saved vs Energy Saved Scatter Plot
+                st.subheader("Money Saved vs Energy Saved")
+                fig = px.scatter(
+                    x=list(items.keys()),
+                    y=list(items.values()),
+                    labels={"x": "Category", "y": "kWh Saved"},
+                    size=[v * money_converter for v in items.values()],
+                    color=list(items.keys()),
+                    title="Size represents dollar savings"
+                )
+                st.plotly_chart(fig)
+
+            if total_kwh_saved >= tesla_kwh_pm:
+                st.success("You can save enough energy monthly to charge an electric vehicle!")
+
+            for name, kwh in items.items():
+                if kwh > 0:
+                    st.write(f"{name}: saves {kwh:.2f} kWh → ${kwh*money_converter:.2f}")
+
+            if st.button("View Credits / Sources"):
+                st.header("Credits & Sources")
+                st.write("- ENERGY STAR‑qualified appliances reduce energy use by at least 30% of baseline usage (EPA / ENERGY STAR program)")
+                st.write("- Smart learning thermostats reduce total energy consumption ~11% based on EPA estimates (10‑12% HVAC savings, ~11% total)")
+                st.write("- Efficient window upgrades can cut household energy bills by approximately 12%, within EPA‑reported typical 7–15% range")
+                st.write("- Bulb wattage savings (52W per conventional bulb replaced with LED) based on typical incandescent vs LED averages")
+                st.write("- Tesla comparison: 153.33 kWh/month assumes 1,000 miles driven at ~300 Wh/mile (Tesla Model 3 average)")
         else:
-            st.write("Please confirm your answer to move on.")
+            st.warning("Please confirm all inputs to proceed.")
     else:
-        st.write("Please confirm your answer to move on.")
+        st.warning("Please confirm answers to proceed.")
 
-st.write(
-    "I hope this helps you save energy. None of your answers are stored and you are the only person able to see these results.\n")
-st.write("Have a nice day!")
-
-# version 1.5! Check my github for more info :)
-
-# C:\Users\ahali\AppData\Local\Programs\Python\Python312\Scripts
-#do this^^^
+    st.write("I hope this helps you save energy. None of your answers are stored.")
