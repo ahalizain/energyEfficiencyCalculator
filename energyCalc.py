@@ -103,8 +103,10 @@ if __name__ == "__main__":
                 st.subheader("Savings Breakdown (kWh)")
                 st.bar_chart(
                     {k: v for k, v in items.items() if v > 0},
+                    x_label="Upgrade Category",  # Label for the X-axis
+                    y_label="Potential Monthly Savings (kWh)", # Label for the Y-axis
                     color="#4CAF50"  # Green for energy savings
-                )
+                    )
                 
                 # 2. Money Saved vs Energy Saved Scatter Plot
                 st.subheader("Money Saved vs Energy Saved")
