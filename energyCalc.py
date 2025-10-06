@@ -129,11 +129,16 @@ if __name__ == "__main__":
 
             if st.button("View Credits / Sources"):
                 st.header("Credits & Sources")
-                st.write("- ENERGY STAR‑qualified appliances reduce energy use by at least 30% of baseline usage (EPA / ENERGY STAR program)")
-                st.write("- Smart learning thermostats reduce total energy consumption ~11% based on EPA estimates (10‑12% HVAC savings, ~11% total)")
-                st.write("- Efficient window upgrades can cut household energy bills by approximately 12%, within EPA‑reported typical 7–15% range")
+                st.write("- ENERGY STAR-qualified appliances reduce energy use by at least 30% of baseline usage (EPA / ENERGY STAR program)")
+                st.link_button("View ENERGY STAR Appliance Info", "https://www.energystar.gov/products/energy_choices_count")
+                st.write("- Smart learning thermostats reduce total energy consumption ~11% based on EPA estimates (10-12% HVAC savings, ~11% total)")
+                st.link_button("View ENERGY STAR Smart Thermostat FAQ", "https://www.energystar.gov/products/heating_cooling/smart_thermostats/smart_thermostat_faq")
+                st.write("- Efficient window upgrades can cut household energy bills by approximately 12%, within EPA-reported typical 7–15% range")
+                st.link_button("View ENERGY STAR Windows, Doors, and Skylights", "https://www.energystar.gov/products/res_windows_doors_skylights")
                 st.write("- Bulb wattage savings (52W per conventional bulb replaced with LED) based on typical incandescent vs LED averages")
+                st.link_button("View Lighting Efficiency Article", "https://voltaelectricinc.com/blog/energy-efficient-lighting-how-to-lower-your-electricity-bill")
                 st.write("- Tesla comparison: 153.33 kWh/month assumes 1,000 miles driven at ~300 Wh/mile (Tesla Model 3 average)")
+                st.link_button("View Tesla Model 3 Energy Data", "https://ev-database.org/imp/car/1322/Tesla-Model-3-Performance")
         else:
             st.warning("Please confirm all inputs to proceed.")
     else:
