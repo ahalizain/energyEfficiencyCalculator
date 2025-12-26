@@ -1,6 +1,32 @@
 import streamlit as st
 import time
 import plotly.express as px  # For interactive charts
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+import io
+
+def generate_pdf():
+    """Generate a PDF report with energy savings data"""
+    # Create PDF in memory
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter  # 612 x 792 points
+    
+    # Add title
+    pdf.setFont("Helvetica-Bold", 20)
+    pdf.drawString(50, height - 50, "Energy Efficiency Report")
+    
+    # Add placeholder content (will be replaced with actual data later)
+    pdf.setFont("Helvetica", 12)
+    pdf.drawString(50, height - 100, "Hello World")
+    pdf.drawString(50, height - 120, "This is a placeholder for your energy savings report.")
+    pdf.drawString(50, height - 140, "Future versions will include your personalized calculations and charts.")
+    
+    # Save and return
+    pdf.save()
+    buffer.seek(0)
+    return buffer
 
 if __name__ == "__main__":
     st.title("Energy Efficiency Calculator")
@@ -139,10 +165,22 @@ if __name__ == "__main__":
                 st.link_button("View Lighting Efficiency Article", "https://voltaelectricinc.com/blog/energy-efficient-lighting-how-to-lower-your-electricity-bill")
                 st.write("- Tesla comparison: 153.33 kWh/month assumes 1,000 miles driven at ~300 Wh/mile (Tesla Model 3 average)")
                 st.link_button("View Tesla Model 3 Energy Data", "https://ev-database.org/imp/car/1322/Tesla-Model-3-Performance")
+            
+            # --- PDF DOWNLOAD BUTTON (NEW FEATURE) ---
+            st.divider()
+            st.subheader("Download Your Report")
+            pdf_file = generate_pdf()
+            st.download_button(
+                label="📄 Download PDF Report",
+                data=pdf_file,
+                file_name="energy_efficiency_report.pdf",
+                mime="application/pdf",
+                help="Download your personalized energy efficiency report as a PDF"
+            )
+            
         else:
             st.warning("Please confirm all inputs to proceed.")
     else:
         st.warning("Please confirm answers to proceed.")
-    st.write("Created March 2023. Updated regularly. Last Update Nov 2025.")
+    st.write("Created March 2023. Updated regularly. Last Update Oct 2025.")
     st.write("I hope this helps you save energy. None of your answers are stored.")
-
