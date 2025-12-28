@@ -1,27 +1,87 @@
 import streamlit as st
 import time
-import plotly.express as px  # For interactive charts
+import matplotlib.pyplot as plt
+import matplotlib
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 import io
 
-def generate_pdf():
+# Set matplotlib to use non-interactive backend for Streamlit
+matplotlib.use('Agg')
+
+def generate_pdf(total_kwh_saved, total_money_saved, items, money_converter, tesla_kwh_pm, fig_bar, fig_scatter):
     """Generate a PDF report with energy savings data"""
     # Create PDF in memory
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=letter)
     width, height = letter  # 612 x 792 points
     
+    current_y = height - 50  # Track vertical position
+    
     # Add title
     pdf.setFont("Helvetica-Bold", 20)
-    pdf.drawString(50, height - 50, "Energy Efficiency Report")
+    pdf.drawString(50, current_y, "Energy Efficiency Report")
+    current_y -= 40
     
-    # Add placeholder content (will be replaced with actual data later)
-    pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, height - 100, "Hello World")
-    pdf.drawString(50, height - 120, "This is a placeholder for your energy savings report.")
-    pdf.drawString(50, height - 140, "Future versions will include your personalized calculations and charts.")
+    # Add main summary text
+    pdf.setFont("Helvetica-Bold", 14)
+    summary_text = f"You have potential to save {total_kwh_saved:.2f} kWh and ${total_money_saved:.2f} per month!"
+    pdf.drawString(50, current_y, summary_text)
+    current_y -= 30
+    
+    # Add EV message if applicable
+    if total_kwh_saved >= tesla_kwh_pm:
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.setFillColorRGB(0, 0.6, 0)  # Green color
+        pdf.drawString(50, current_y, "You can save enough energy monthly to charge an electric vehicle!")
+        pdf.setFillColorRGB(0, 0, 0)  # Reset to black
+        current_y -= 35
+    else:
+        current_y -= 15
+    
+    # Add Bar Chart: Savings Breakdown
+    pdf.setFont("Helvetica-Bold", 14)
+    pdf.drawString(50, current_y, "Savings Breakdown (kWh)")
+    current_y -= 10
+    
+    # Convert matplotlib bar chart to image
+    img_buffer_bar = io.BytesIO()
+    fig_bar.savefig(img_buffer_bar, format='png', dpi=100, bbox_inches='tight')
+    img_buffer_bar.seek(0)
+    pdf.drawImage(ImageReader(img_buffer_bar), 50, current_y - 300, width=500, height=300)
+    current_y -= 320
+    
+    # Add Scatter Plot: Money Saved vs Energy Saved
+    pdf.setFont("Helvetica-Bold", 14)
+    pdf.drawString(50, current_y, "Money Saved vs Energy Saved")
+    current_y -= 10
+    
+    # Convert matplotlib scatter plot to image
+    img_buffer_scatter = io.BytesIO()
+    fig_scatter.savefig(img_buffer_scatter, format='png', dpi=100, bbox_inches='tight')
+    img_buffer_scatter.seek(0)
+    pdf.drawImage(ImageReader(img_buffer_scatter), 50, current_y - 300, width=500, height=300)
+    current_y -= 320
+    
+    # Add itemized savings list
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(50, current_y, "Itemized Savings Breakdown:")
+    current_y -= 20
+    
+    pdf.setFont("Helvetica", 11)
+    for name, kwh in items.items():
+        if kwh > 0:
+            savings_text = f"{name}: saves {kwh:.2f} kWh → ${kwh*money_converter:.2f}"
+            pdf.drawString(70, current_y, savings_text)
+            current_y -= 18
+    
+    # Add footer text
+    current_y -= 20
+    pdf.setFont("Helvetica-Italic", 9)
+    pdf.drawString(50, current_y, "Created March 2023. Updated regularly. Last Update Nov 2025.")
+    current_y -= 15
+    pdf.drawString(50, current_y, "I hope this helps you save energy. None of your answers are stored.")
     
     # Save and return
     pdf.save()
@@ -55,10 +115,6 @@ if __name__ == "__main__":
 
     confirm1 = st.checkbox("Confirm answers for this section")
     if confirm1:
-        bar1 = st.progress(0)
-        for p in [25,50,65,75,95,100]:
-            time.sleep(0.5)
-            bar1.progress(p)
 
         st.header("Detailed Appliance Information")
         oven_power_mode = st.selectbox("Energy rating mode for Oven/Stovetop", ["Actual","Average"])
@@ -123,28 +179,62 @@ if __name__ == "__main__":
             st.header("Your Individualized Report")
             st.write(f"You have potential to save **{total_kwh_saved:.2f} kWh** and **${total_money_saved:.2f}** per month!")
             
-            # --- ADDED VISUALIZATIONS ---
+            # --- VISUALIZATIONS ---
             if total_kwh_saved > 0:
-                # 1. Savings Breakdown Bar Chart
+                # 1. Savings Breakdown Bar Chart (Streamlit display)
                 st.subheader("Savings Breakdown (kWh)")
+                filtered_items = {k: v for k, v in items.items() if v > 0}
                 st.bar_chart(
-                    {k: v for k, v in items.items() if v > 0},
-                    x_label="Upgrade Category",  # Label for the X-axis
-                    y_label="Potential Monthly Savings (kWh)", # Label for the Y-axis
-                    color="#4CAF50"  # Green for energy savings
-                    )
+                    filtered_items,
+                    x_label="Upgrade Category",
+                    y_label="Potential Monthly Savings (kWh)",
+                    color="#4CAF50"
+                )
+                
+                # Create matplotlib version of bar chart for PDF
+                fig_bar, ax_bar = plt.subplots(figsize=(10, 6))
+                ax_bar.bar(list(filtered_items.keys()), list(filtered_items.values()), color='#4CAF50')
+                ax_bar.set_xlabel('Upgrade Category', fontsize=12)
+                ax_bar.set_ylabel('Potential Monthly Savings (kWh)', fontsize=12)
+                ax_bar.set_title('Savings Breakdown (kWh)', fontsize=14, fontweight='bold')
+                ax_bar.grid(axis='y', alpha=0.3)
+                plt.xticks(rotation=45, ha='right')
+                plt.tight_layout()
                 
                 # 2. Money Saved vs Energy Saved Scatter Plot
                 st.subheader("Money Saved vs Energy Saved")
-                fig = px.scatter(
-                    x=list(items.keys()),
-                    y=list(items.values()),
-                    labels={"x": "Category", "y": "kWh Saved"},
-                    size=[v * money_converter for v in items.values()],
-                    color=list(items.keys()),
-                    title="Size represents dollar savings"
+                
+                # Create matplotlib scatter plot
+                fig_scatter, ax_scatter = plt.subplots(figsize=(10, 6))
+                
+                # Calculate sizes based on dollar savings (scale up for visibility)
+                sizes = [v * money_converter * 100 for v in items.values()]
+                
+                # Create color map for different categories
+                colors = plt.cm.tab10(range(len(items)))
+                
+                # Create scatter plot
+                scatter = ax_scatter.scatter(
+                    range(len(items.keys())),
+                    list(items.values()),
+                    s=sizes,
+                    c=colors,
+                    alpha=0.6,
+                    edgecolors='black',
+                    linewidth=1.5
                 )
-                st.plotly_chart(fig)
+                
+                # Set x-axis labels
+                ax_scatter.set_xticks(range(len(items.keys())))
+                ax_scatter.set_xticklabels(list(items.keys()), rotation=45, ha='right')
+                ax_scatter.set_xlabel('Category', fontsize=12)
+                ax_scatter.set_ylabel('kWh Saved', fontsize=12)
+                ax_scatter.set_title('Size represents dollar savings', fontsize=14, fontweight='bold')
+                ax_scatter.grid(alpha=0.3)
+                plt.tight_layout()
+                
+                # Display in Streamlit
+                st.pyplot(fig_scatter)
 
             if total_kwh_saved >= tesla_kwh_pm:
                 st.success("You can save enough energy monthly to charge an electric vehicle!")
@@ -166,17 +256,30 @@ if __name__ == "__main__":
                 st.write("- Tesla comparison: 153.33 kWh/month assumes 1,000 miles driven at ~300 Wh/mile (Tesla Model 3 average)")
                 st.link_button("View Tesla Model 3 Energy Data", "https://ev-database.org/imp/car/1322/Tesla-Model-3-Performance")
             
-            # --- PDF DOWNLOAD BUTTON (NEW FEATURE) ---
+            # --- PDF DOWNLOAD BUTTON ---
             st.divider()
             st.subheader("Download Your Report")
-            pdf_file = generate_pdf()
-            st.download_button(
-                label="📄 Download PDF Report",
-                data=pdf_file,
-                file_name="energy_efficiency_report.pdf",
-                mime="application/pdf",
-                help="Download your personalized energy efficiency report as a PDF"
-            )
+            
+            # Generate PDF with all data (only if there are savings to report)
+            if total_kwh_saved > 0:
+                pdf_file = generate_pdf(
+                    total_kwh_saved=total_kwh_saved,
+                    total_money_saved=total_money_saved,
+                    items=items,
+                    money_converter=money_converter,
+                    tesla_kwh_pm=tesla_kwh_pm,
+                    fig_bar=fig_bar,
+                    fig_scatter=fig_scatter
+                )
+                st.download_button(
+                    label="📄 Download PDF Report",
+                    data=pdf_file,
+                    file_name="energy_efficiency_report.pdf",
+                    mime="application/pdf",
+                    help="Download your personalized energy efficiency report as a PDF"
+                )
+            else:
+                st.info("Complete the form with potential savings to generate a PDF report.")
             
         else:
             st.warning("Please confirm all inputs to proceed.")
@@ -184,4 +287,3 @@ if __name__ == "__main__":
         st.warning("Please confirm answers to proceed.")
     st.write("Created March 2023. Updated regularly. Last Update Nov 2025.")
     st.write("I hope this helps you save energy. None of your answers are stored.")
-
