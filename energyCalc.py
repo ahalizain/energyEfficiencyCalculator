@@ -115,7 +115,6 @@ if __name__ == "__main__":
 
     confirm1 = st.checkbox("Confirm answers for this section")
     if confirm1:
-        
         st.header("Detailed Appliance Information")
         oven_power_mode = st.selectbox("Energy rating mode for Oven/Stovetop", ["Actual","Average"])
         oven_watts = st.number_input("Enter Oven/Stovetop power (watts)", min_value=0.0) if oven_power_mode=="Actual" else 2350.0
@@ -291,4 +290,3 @@ if __name__ == "__main__":
         st.warning("Please confirm answers to proceed.")
     st.write("Created March 2023. Updated regularly. Last Update Dec 2025.")
     st.write("I hope this helps you save energy. None of your answers are stored.")
-
