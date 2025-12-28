@@ -290,3 +290,4 @@ if __name__ == "__main__":
         st.warning("Please confirm answers to proceed.")
     st.write("Created March 2023. Updated regularly. Last Update Dec 2025.")
     st.write("I hope this helps you save energy. None of your answers are stored.")
+
