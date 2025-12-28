@@ -115,6 +115,10 @@ if __name__ == "__main__":
 
     confirm1 = st.checkbox("Confirm answers for this section")
     if confirm1:
+        bar1 = st.progress(0)
+        for p in [25,50,65,75,95,100]:
+            time.sleep(0.5)
+            bar1.progress(p)
 
         st.header("Detailed Appliance Information")
         oven_power_mode = st.selectbox("Energy rating mode for Oven/Stovetop", ["Actual","Average"])
@@ -204,7 +208,7 @@ if __name__ == "__main__":
                 # 2. Money Saved vs Energy Saved Scatter Plot
                 st.subheader("Money Saved vs Energy Saved")
                 
-                # Create matplotlib scatter plot
+                # Create matplotlib scatter plot for both Streamlit and PDF
                 fig_scatter, ax_scatter = plt.subplots(figsize=(10, 6))
                 
                 # Calculate sizes based on dollar savings (scale up for visibility)
@@ -278,6 +282,10 @@ if __name__ == "__main__":
                     mime="application/pdf",
                     help="Download your personalized energy efficiency report as a PDF"
                 )
+                
+                # Close matplotlib figures to free up memory
+                plt.close(fig_bar)
+                plt.close(fig_scatter)
             else:
                 st.info("Complete the form with potential savings to generate a PDF report.")
             
@@ -285,5 +293,5 @@ if __name__ == "__main__":
             st.warning("Please confirm all inputs to proceed.")
     else:
         st.warning("Please confirm answers to proceed.")
-    st.write("Created March 2023. Updated regularly. Last Update Nov 2025.")
+    st.write("Created March 2023. Updated regularly. Last Update Dec 2025.")
     st.write("I hope this helps you save energy. None of your answers are stored.")
