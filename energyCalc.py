@@ -195,30 +195,57 @@ if __name__ == "__main__":
     if confirm1:
 
         st.header("Detailed Appliance Information")
-        oven_power_mode = st.selectbox("Energy rating mode for Oven/Stovetop", ["Actual","Average"])
-        oven_watts = st.number_input("Enter Oven/Stovetop power (watts)", min_value=0.0) if oven_power_mode=="Actual" else 2350.0
-        oven_usage_mode = st.selectbox("Usage mode for Oven/Stovetop (hours/month)", ["Actual","Average"])
-        oven_hours = st.number_input("Enter Oven/Stovetop usage (hours/month)", min_value=0.0) if oven_usage_mode=="Actual" else 25
+        
+        # CONDITIONAL DISPLAY: Only show detailed questions if appliance is NOT Energy Star
+        
+        # OVEN/STOVETOP - Only show if "No" (not Energy Star)
+        if oven_stovetop == "No":
+            oven_power_mode = st.selectbox("Energy rating mode for Oven/Stovetop", ["Actual","Average"], key="oven_power_mode")
+            oven_watts = st.number_input("Enter Oven/Stovetop power (watts)", min_value=0.0, key="oven_watts") if oven_power_mode=="Actual" else 2350.0
+            oven_usage_mode = st.selectbox("Usage mode for Oven/Stovetop (hours/month)", ["Actual","Average"], key="oven_usage_mode")
+            oven_hours = st.number_input("Enter Oven/Stovetop usage (hours/month)", min_value=0.0, key="oven_hours") if oven_usage_mode=="Actual" else 25
+        else:
+            # Set default values when Energy Star (won't be used in calculations anyway)
+            oven_watts = 2350.0
+            oven_hours = 25
 
-        washer_power_mode = st.selectbox("Energy rating mode for Washer", ["Actual","Average"])
-        washer_watts = st.number_input("Enter Washer power (watts)", min_value=0.0) if washer_power_mode=="Actual" else 2000.0
-        washer_usage_mode = st.selectbox("Usage mode for Washer (hours/month)", ["Actual","Average"])
-        washer_hours = st.number_input("Enter Washer usage (hours/month)", min_value=0.0) if washer_usage_mode=="Actual" else 24
+        # WASHER - Only show if "No" (not Energy Star)
+        if washer == "No":
+            washer_power_mode = st.selectbox("Energy rating mode for Washer", ["Actual","Average"], key="washer_power_mode")
+            washer_watts = st.number_input("Enter Washer power (watts)", min_value=0.0, key="washer_watts") if washer_power_mode=="Actual" else 2000.0
+            washer_usage_mode = st.selectbox("Usage mode for Washer (hours/month)", ["Actual","Average"], key="washer_usage_mode")
+            washer_hours = st.number_input("Enter Washer usage (hours/month)", min_value=0.0, key="washer_hours") if washer_usage_mode=="Actual" else 24
+        else:
+            # Set default values when Energy Star (won't be used in calculations anyway)
+            washer_watts = 2000.0
+            washer_hours = 24
 
-        dryer_power_mode = st.selectbox("Energy rating mode for Dryer", ["Actual","Average"])
-        dryer_watts = st.number_input("Enter Dryer power (watts)", min_value=0.0) if dryer_power_mode=="Actual" else 2800.0
-        dryer_usage_mode = st.selectbox("Usage mode for Dryer (hours/month)", ["Actual","Average"])
-        dryer_hours = st.number_input("Enter Dryer usage (hours/month)", min_value=0.0) if dryer_usage_mode=="Actual" else 30
+        # DRYER - Only show if "No" (not Energy Star)
+        if dryer == "No":
+            dryer_power_mode = st.selectbox("Energy rating mode for Dryer", ["Actual","Average"], key="dryer_power_mode")
+            dryer_watts = st.number_input("Enter Dryer power (watts)", min_value=0.0, key="dryer_watts") if dryer_power_mode=="Actual" else 2800.0
+            dryer_usage_mode = st.selectbox("Usage mode for Dryer (hours/month)", ["Actual","Average"], key="dryer_usage_mode")
+            dryer_hours = st.number_input("Enter Dryer usage (hours/month)", min_value=0.0, key="dryer_hours") if dryer_usage_mode=="Actual" else 30
+        else:
+            # Set default values when Energy Star (won't be used in calculations anyway)
+            dryer_watts = 2800.0
+            dryer_hours = 30
 
-        refrigerator_power_mode = st.selectbox("Energy rating mode for Refrigerator", ["Actual","Average"])
-        refrigerator_watts = st.number_input("Enter Refrigerator power (watts)", min_value=0.0) if refrigerator_power_mode=="Actual" else 2000.0
-        refrigerator_usage_mode = st.selectbox("Usage mode for Refrigerator (hours/month)", ["Actual","Average"])
-        refrigerator_hours = st.number_input("Enter Refrigerator usage (hours/month)", min_value=0.0) if refrigerator_usage_mode=="Actual" else 24
+        # REFRIGERATOR - Only show if "No" (not Energy Star)
+        if refrigerator == "No":
+            refrigerator_power_mode = st.selectbox("Energy rating mode for Refrigerator", ["Actual","Average"], key="refrigerator_power_mode")
+            refrigerator_watts = st.number_input("Enter Refrigerator power (watts)", min_value=0.0, key="refrigerator_watts") if refrigerator_power_mode=="Actual" else 2000.0
+            refrigerator_usage_mode = st.selectbox("Usage mode for Refrigerator (hours/month)", ["Actual","Average"], key="refrigerator_usage_mode")
+            refrigerator_hours = st.number_input("Enter Refrigerator usage (hours/month)", min_value=0.0, key="refrigerator_hours") if refrigerator_usage_mode=="Actual" else 24
+        else:
+            # Set default values when Energy Star (won't be used in calculations anyway)
+            refrigerator_watts = 2000.0
+            refrigerator_hours = 24
 
         st.header("Additional Questions")
-        ev = st.selectbox("Do you currently own an electric vehicle?", ["Yes","No"])
+        ev = st.selectbox("Do you currently own an electric vehicle?", ["Yes","No"], key="ev")
 
-        confirm2 = st.checkbox("Confirm all inputs and calculate results")
+        confirm2 = st.checkbox("Confirm all inputs and calculate results", key="confirm2")
         if confirm2:
             bar2 = st.progress(0)
             for p in [20,50,75,100]:
