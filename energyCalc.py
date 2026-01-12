@@ -130,12 +130,12 @@ if __name__ == "__main__":
         with col1:
             if st.button("Yes, overwrite with test case"):
                 st.session_state.update({
-                    "house_area": 1900,
-                    "kwh_consumption": 500.0,
-                    "dollar_kwh_consumption": 300.0,
+                    "house_area": 2200,
+                    "kwh_consumption": 1100,
+                    "dollar_kwh_consumption": 180,
                     "windows_replacement": "No",
-                    "num_conv_bulb": 52,
-                    "num_led_bulb": 8,
+                    "num_conv_bulb": 50,
+                    "num_led_bulb": 10,
                     "thermostat": "No",
                     "heating": "No",
                     "air_conditioning": "Yes",
@@ -255,7 +255,7 @@ if __name__ == "__main__":
             energy_star_savings = 0.3
             thermostat_savings = 0.11
             windows_savings = 0.12
-            money_converter = dollar_kwh_consumption / kwh_consumption if kwh_consumption > 0 else 0.20
+            money_converter = 0.1798  # dollars per kWh
             tesla_kwh_pm = 153.33
 
             if kwh_consumption == 0:
@@ -394,7 +394,7 @@ if __name__ == "__main__":
             st.warning("Please confirm all inputs to proceed.")
     else:
         st.warning("Please confirm answers to proceed.")
-    st.write("Created March 2023. Updated regularly. Last Update Dec 2025.")
+    st.write("Created March 2023. Updated regularly. Last Update Jan 2026.")
     st.write("I hope this helps you save energy. None of your answers are stored.")
 
 
