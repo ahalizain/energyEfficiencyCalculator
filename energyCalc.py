@@ -104,6 +104,9 @@ if __name__ == "__main__":
     st.subheader("This will calculate your energy savings using some questions.")
     st.subheader("You will need your energy bill handy for some of the questions presented.")
 
+    # Video guide link
+    st.markdown("Want a video guide to use this app? Click [Here!](https://www.youtube.com/watch?v=AxiDexkZKR0)")
+
     # ==================================================
     # TEST CASE BUTTON (ADDED — BEFORE FIRST QUESTION)
     # ==================================================
