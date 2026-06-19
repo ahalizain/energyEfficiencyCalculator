@@ -17,7 +17,7 @@ from reportlab.lib.utils import ImageReader
 # PAGE CONFIG  (must be the first Streamlit call)
 # ======================================================
 st.set_page_config(
-    page_title="Energy Efficiency for All",
+    page_title="Zain Ahmad's Energy Efficiency Calculator",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
