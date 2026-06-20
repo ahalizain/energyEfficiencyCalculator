@@ -393,6 +393,8 @@ def render_survey():
     with res_tab:
         st.header("Your Individualized Report")
         if st.button("⚡ Calculate My Savings"):
+            ok = save_response({...})
+            st.toast("Saved ✅" if ok else "Save failed ❌")
             bar = st.progress(0)
             for p in (25, 60, 100):
                 time.sleep(0.25); bar.progress(p)
