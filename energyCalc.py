@@ -39,7 +39,7 @@ BLUE  = "#1565C0"
 # SUPABASE (anonymous data collection) — degrades gracefully
 # if secrets aren't set, so the app never crashes for users.
 # ======================================================
-@st.cache_resource
+#@st.cache_resource
 def get_supabase():
     try:
         from supabase import create_client
