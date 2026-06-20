@@ -315,7 +315,6 @@ def render_survey():
     # ---------- RESULTS ----------
     with res_tab:
         st.header("Your Individualized Report")
-        st.write("DB connected:", get_supabase() is not None)
         if st.button("⚡ Calculate My Savings"):
             bar = st.progress(0)
             for p in (25, 60, 100):
