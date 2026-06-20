@@ -216,7 +216,7 @@ def render_home():
     st.markdown("""
     <div class="hero">
         <h1>⚡ Zain Ahmad's Energy Efficiency Calculator</h1>
-        <p>Saving money on your energy bill hasn't been this fast. Ever..</p>
+        <p>Saving money on your energy bill hasn't been this fast. Ever.</p>
         <p>Answer a few questions, see exactly where you can save, and download a free report.</p>
     </div>
     """, unsafe_allow_html=True)
