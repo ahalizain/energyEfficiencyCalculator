@@ -48,6 +48,9 @@ def get_supabase():
         return None
 
 def save_response(payload: dict):
+    for k, v in payload.items():
+        if isinstance(v, set):
+            st.error(f"⚠️ '{k}' is a set: {v}")   # this names the bad field
     client = get_supabase()
     if client is None:
         return False
