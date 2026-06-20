@@ -74,7 +74,7 @@ for k, v in {"test_mode": False, "test_case_used": False,
 def inject_css():
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@500;600;700&display=swap');
 
     /* Flyer palette */
     :root {
@@ -87,64 +87,64 @@ def inject_css():
 
     /* App-wide cream background to match the flyer */
     .stApp { background: #FBF0DD; }
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: var(--ink); }
-    h1, h2, h3 { font-family: 'Poppins', sans-serif; color: #2F8E8E; }
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: var(--ink); font-size: 1.12rem; }
+    h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: #2F8E8E; font-weight: 800; letter-spacing: -0.5px; }
     #MainMenu, footer { visibility: hidden; }
 
-    /* ---------- HERO (teal headline like the flyer title) ---------- */
+    /* ---------- HERO (big teal headline like the flyer title) ---------- */
     .hero {
         background: #FBF0DD;
-        padding: 2.4rem 2rem 1.6rem 2rem;
+        padding: 2.6rem 2rem 1.6rem 2rem;
         border-radius: 22px;
         text-align: left;
         margin-bottom: 1.4rem;
     }
-    .hero h1 { font-size: 3rem; line-height:1.05; margin: 0 0 .4rem 0; color:#2F8E8E; }
-    .hero p  { font-size: 1.15rem; color:#3A6FD8; font-weight:600; margin:.2rem 0; }
+    .hero h1 { font-size: 4.4rem; line-height:1.02; margin: 0 0 .6rem 0; color:#2F8E8E; font-weight:900; }
+    .hero p  { font-size: 1.5rem; color:#3A6FD8; font-weight:700; margin:.2rem 0; }
 
-    /* ---------- Mint hook panel (the "Most homeowners think..." block) ---------- */
+    /* ---------- Mint hook panel ---------- */
     .hook {
         background: #C9E8D2;
-        padding: 1.8rem 2rem; border-radius: 18px;
-        color:#3A6FD8; font-weight:600; font-size:1.1rem; line-height:1.5;
+        padding: 2rem 2.2rem; border-radius: 18px;
+        color:#3A6FD8; font-weight:700; font-size:1.5rem; line-height:1.45;
         margin-bottom: 1.4rem;
     }
-    .hook strong { color:#2F8E8E; }
+    .hook strong { color:#2F8E8E; font-size:1.7rem; }
 
     /* ---------- Upgrade section ---------- */
-    .upgrade h2 { color:#3A6FD8; font-size:2.2rem; margin-bottom:.6rem; }
-    .upgrade .lead { color:#3A6FD8; font-weight:700; font-size:1.15rem; margin:.4rem 0; }
-    .upgrade ul { color:#3A6FD8; font-weight:600; font-size:1.05rem; }
-    .upgrade .tagline { color:#3A6FD8; font-weight:700; font-size:1.2rem; margin-top:.8rem; }
+    .upgrade h2 { color:#3A6FD8; font-size:3.2rem; margin-bottom:.6rem; font-weight:900; }
+    .upgrade .lead { color:#3A6FD8; font-weight:800; font-size:1.6rem; margin:.4rem 0; }
+    .upgrade ul { color:#3A6FD8; font-weight:700; font-size:1.45rem; line-height:1.6; }
+    .upgrade .tagline { color:#3A6FD8; font-weight:800; font-size:1.7rem; margin-top:.8rem; }
 
     /* ---------- Cards ---------- */
     .card {
         background:#fff; border:1px solid #e7ddc8; border-radius:16px;
-        padding:1.4rem; text-align:center; height:100%;
+        padding:1.6rem; text-align:center; height:100%;
         box-shadow:0 4px 16px rgba(0,0,0,.06);
     }
-    .card .emoji { font-size:2.2rem; }
-    .card h3 { margin:.5rem 0 .3rem 0; color:#2F8E8E; }
-    .card p  { color:#555; font-size:.95rem; margin:0; }
+    .card .emoji { font-size:2.6rem; }
+    .card h3 { margin:.5rem 0 .3rem 0; color:#2F8E8E; font-size:1.5rem; }
+    .card p  { color:#555; font-size:1.1rem; margin:0; }
 
     /* ---------- Mint "How It Works" panel ---------- */
     .howto {
-        background:#C9E8D2; padding:1.6rem 2rem; border-radius:18px; margin-top:1rem;
+        background:#C9E8D2; padding:1.8rem 2.2rem; border-radius:18px; margin-top:1rem;
     }
-    .howto h3 { color:#2F8E8E; margin-top:0; }
-    .howto ol { color:#3A6FD8; font-weight:600; font-size:1.05rem; }
+    .howto h3 { color:#2F8E8E; margin-top:0; font-size:2rem; }
+    .howto ol { color:#3A6FD8; font-weight:700; font-size:1.4rem; line-height:1.7; }
 
-    /* ---------- Tabs ---------- */
+    /* ---------- Tabs (bigger labels) ---------- */
     .stTabs [data-baseweb="tab-list"] { gap: 8px; }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 12px 12px 0 0; padding: 10px 20px; font-weight:600;
+        border-radius: 12px 12px 0 0; padding: 12px 24px; font-weight:700; font-size:1.15rem;
     }
     .stTabs [aria-selected="true"] { background:#C9E8D2 !important; color:#2F8E8E !important; }
 
     /* ---------- Buttons ---------- */
     div.stButton > button {
         background:#2F8E8E; color:#fff; border:none; border-radius:10px;
-        padding:.6rem 1.5rem; font-weight:600;
+        padding:.7rem 1.7rem; font-weight:700; font-size:1.15rem;
     }
     div.stButton > button:hover { background:#256f6f; color:#fff; }
     </style>
