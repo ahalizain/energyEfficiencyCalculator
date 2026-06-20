@@ -48,6 +48,9 @@ def get_supabase():
         return None
 
 def save_response(payload: dict):
+    for k, v in payload.items():
+        if isinstance(v, set):
+            st.error(f"⚠️ '{k}' is a set: {v}")   # this names the bad field
     client = get_supabase()
     if client is None:
         return False
@@ -393,7 +396,6 @@ def render_survey():
     with res_tab:
         st.header("Your Individualized Report")
         if st.button("⚡ Calculate My Savings"):
-            st.write("URL in use:", st.secrets["SUPABASE_URL"])
             ok = save_response({...})
             st.toast("Saved ✅" if ok else "Save failed ❌")
             bar = st.progress(0)
