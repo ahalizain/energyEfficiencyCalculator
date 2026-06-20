@@ -256,7 +256,7 @@ def render_home():
     st.markdown("""
     <div class="hero">
         <h1>⚡ Energy Efficiency Calculator</h1>
-        <p>Improve your home in 2 minutes — free, anonymous, no signup.</p>
+        <p>Saving money on your energy bill hasn't been this fast. Ever.</p>
     </div>
     """, unsafe_allow_html=True)
 
