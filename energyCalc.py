@@ -17,7 +17,7 @@ from reportlab.lib.utils import ImageReader
 # PAGE CONFIG  (must be the first Streamlit call)
 # ======================================================
 st.set_page_config(
-    page_title="Zain Ahmad's Energy Efficiency Calculator",
+    page_title="Energy Efficiency Calculator",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -215,8 +215,8 @@ def render_sidebar():
 def render_home():
     st.markdown("""
     <div class="hero">
-        <h1>⚡ Energy Efficiency for All</h1>
-        <p>Improve your home in 2 minutes.</p>
+        <h1>⚡ Zain Ahmad's Energy Efficiency Calculator</h1>
+        <p>Saving money on your energy bill hasn't been this fast. Ever..</p>
         <p>Answer a few questions, see exactly where you can save, and download a free report.</p>
     </div>
     """, unsafe_allow_html=True)
