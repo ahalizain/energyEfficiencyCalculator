@@ -76,38 +76,77 @@ def inject_css():
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
 
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    /* Flyer palette */
+    :root {
+        --cream:  #FBF0DD;
+        --mint:   #C9E8D2;
+        --teal:   #2F8E8E;
+        --blue:   #3A6FD8;
+        --ink:    #2b2b2b;
+    }
+
+    /* App-wide cream background to match the flyer */
+    .stApp { background: #FBF0DD; }
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: var(--ink); }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; color: #2F8E8E; }
     #MainMenu, footer { visibility: hidden; }
 
+    /* ---------- HERO (teal headline like the flyer title) ---------- */
     .hero {
-        background: linear-gradient(135deg, #2E7D32 0%, #43A047 45%, #1565C0 100%);
-        padding: 3rem 2rem; border-radius: 22px; color: #fff; text-align: center;
-        box-shadow: 0 12px 34px rgba(0,0,0,.16); margin-bottom: 1.4rem;
+        background: #FBF0DD;
+        padding: 2.4rem 2rem 1.6rem 2rem;
+        border-radius: 22px;
+        text-align: left;
+        margin-bottom: 1.4rem;
     }
-    .hero h1 { font-size: 2.7rem; margin: 0 0 .4rem 0; color:#fff; }
-    .hero p  { font-size: 1.15rem; opacity:.96; margin:.2rem 0; }
+    .hero h1 { font-size: 3rem; line-height:1.05; margin: 0 0 .4rem 0; color:#2F8E8E; }
+    .hero p  { font-size: 1.15rem; color:#3A6FD8; font-weight:600; margin:.2rem 0; }
 
+    /* ---------- Mint hook panel (the "Most homeowners think..." block) ---------- */
+    .hook {
+        background: #C9E8D2;
+        padding: 1.8rem 2rem; border-radius: 18px;
+        color:#3A6FD8; font-weight:600; font-size:1.1rem; line-height:1.5;
+        margin-bottom: 1.4rem;
+    }
+    .hook strong { color:#2F8E8E; }
+
+    /* ---------- Upgrade section ---------- */
+    .upgrade h2 { color:#3A6FD8; font-size:2.2rem; margin-bottom:.6rem; }
+    .upgrade .lead { color:#3A6FD8; font-weight:700; font-size:1.15rem; margin:.4rem 0; }
+    .upgrade ul { color:#3A6FD8; font-weight:600; font-size:1.05rem; }
+    .upgrade .tagline { color:#3A6FD8; font-weight:700; font-size:1.2rem; margin-top:.8rem; }
+
+    /* ---------- Cards ---------- */
     .card {
-        background:#fff; border:1px solid #eef2f1; border-radius:16px;
+        background:#fff; border:1px solid #e7ddc8; border-radius:16px;
         padding:1.4rem; text-align:center; height:100%;
-        box-shadow:0 4px 16px rgba(0,0,0,.07);
+        box-shadow:0 4px 16px rgba(0,0,0,.06);
     }
     .card .emoji { font-size:2.2rem; }
-    .card h3 { margin:.5rem 0 .3rem 0; }
+    .card h3 { margin:.5rem 0 .3rem 0; color:#2F8E8E; }
     .card p  { color:#555; font-size:.95rem; margin:0; }
 
+    /* ---------- Mint "How It Works" panel ---------- */
+    .howto {
+        background:#C9E8D2; padding:1.6rem 2rem; border-radius:18px; margin-top:1rem;
+    }
+    .howto h3 { color:#2F8E8E; margin-top:0; }
+    .howto ol { color:#3A6FD8; font-weight:600; font-size:1.05rem; }
+
+    /* ---------- Tabs ---------- */
     .stTabs [data-baseweb="tab-list"] { gap: 8px; }
     .stTabs [data-baseweb="tab"] {
         border-radius: 12px 12px 0 0; padding: 10px 20px; font-weight:600;
     }
-    .stTabs [aria-selected="true"] { background:#E8F5E9 !important; color:#2E7D32 !important; }
+    .stTabs [aria-selected="true"] { background:#C9E8D2 !important; color:#2F8E8E !important; }
 
+    /* ---------- Buttons ---------- */
     div.stButton > button {
-        background:#2E7D32; color:#fff; border:none; border-radius:10px;
+        background:#2F8E8E; color:#fff; border:none; border-radius:10px;
         padding:.6rem 1.5rem; font-weight:600;
     }
-    div.stButton > button:hover { background:#1B5E20; color:#fff; }
+    div.stButton > button:hover { background:#256f6f; color:#fff; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -213,29 +252,67 @@ def render_sidebar():
 # TAB 1 — HOME / LANDING
 # ======================================================
 def render_home():
+    # Hero title (teal, like the flyer header)
     st.markdown("""
     <div class="hero">
-        <h1>⚡ Zain Ahmad's Energy Efficiency Calculator</h1>
-        <p>Saving money on your energy bill hasn't been this fast. Ever.</p>
-        <p>Answer a few questions, see exactly where you can save, and download a free report.</p>
+        <h1>⚡ Energy Efficiency Calculator</h1>
+        <p>Improve your home in 2 minutes — free, anonymous, no signup.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    c1, c2, c3 = st.columns(3)
-    cards = [
-        ("⏱️", "Takes 2 Minutes", "A short survey about your home, appliances, and bulbs."),
-        ("📊", "Personalized Results", "See your potential monthly savings in kWh and dollars."),
-        ("📄", "Free PDF Report", "Download a clean report you can keep or share — no signup."),
-    ]
-    for col, (emoji, title, body) in zip((c1, c2, c3), cards):
-        col.markdown(
-            f'<div class="card"><div class="emoji">{emoji}</div><h3>{title}</h3><p>{body}</p></div>',
-            unsafe_allow_html=True)
+    # Hook panel + bulb image, side by side (mirrors flyer's top section)
+    hook_col, img_col = st.columns([1.1, 1])
+    with hook_col:
+        st.markdown("""
+        <div class="hook">
+            <strong>Most homeowners think saving energy means expensive upgrades.</strong><br><br>
+            It doesn't.<br><br>
+            Use the Energy Efficiency Calculator to find how simple changes can deliver
+            the largest savings on your monthly electricity bill.
+        </div>
+        """, unsafe_allow_html=True)
+    with img_col:
+        # Drop a bulb photo named "bulb.png" in your repo to match the flyer.
+        # Falls back silently if the file isn't there.
+        try:
+            st.image("ledbulb.jpg", use_container_width=True)
+        except Exception:
+            pass
+
+    # Upgrade Your Home section + thermostat image, side by side
+    img2_col, up_col = st.columns([1, 1.4])
+    with img2_col:
+        try:
+            st.image("smartthermostat.jpg", use_container_width=True)
+        except Exception:
+            pass
+    with up_col:
+        st.markdown("""
+        <div class="upgrade">
+            <h2>Upgrade Your Home</h2>
+            <p class="lead">The biggest savings usually come from:</p>
+            <ul>
+                <li>Replacing incandescent bulbs with LEDs</li>
+                <li>Using a learning smart thermostat</li>
+            </ul>
+            <p class="tagline">Low cost. High impact.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # How It Works panel (mint, numbered — like the flyer)
+    st.markdown("""
+    <div class="howto">
+        <h3>How It Works</h3>
+        <ol>
+            <li>Enter your home's energy details (or use smart averages)</li>
+            <li>See your total potential savings in dollars &amp; kWh</li>
+            <li>Focus on the upgrades that give the most savings per dollar</li>
+        </ol>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.write("")
     st.success("👉 Head to the **Survey** tab above to get started. None of your answers are tied to you — everything is anonymous.")
-    # To add your own hero image instead of the gradient, drop a file in the
-    # repo and call:  st.image("hero.png", use_container_width=True)
 
 # ======================================================
 # TAB 2 — SURVEY (3 subtabs).  Returns nothing; renders results inline.
@@ -315,6 +392,7 @@ def render_survey():
     # ---------- RESULTS ----------
     with res_tab:
         st.header("Your Individualized Report")
+        st.write("DB connected:", get_supabase() is not None)
         if st.button("⚡ Calculate My Savings"):
             bar = st.progress(0)
             for p in (25, 60, 100):
