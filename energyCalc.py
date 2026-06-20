@@ -486,6 +486,8 @@ def render_survey():
                     "owns_ev": ev,
                 })
                 st.toast("Saved ✅" if ok else "Save failed ❌")
+                client = get_supabase()
+                st.write("App is running as role:", client.rpc("whoami").execute().data)
                 st.session_state.do_save = False
 
             # ----- PDF download -----
