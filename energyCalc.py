@@ -55,7 +55,6 @@ def save_response(payload: dict):
         client.table("survey_responses").insert(payload).execute()
         return True
     except Exception as e:
-        st.error(f"Supabase insert error: {e}")
         return False
 
 # ======================================================
