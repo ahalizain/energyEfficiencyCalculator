@@ -99,7 +99,7 @@ def inject_css():
         text-align: left;
         margin-bottom: 1.4rem;
     }
-    .hero h1 { font-size: 4.4rem; line-height:1.02; margin: 0 0 .6rem 0; color:#2F8E8E; font-weight:900; }
+    .hero h1 { font-size: 3.4rem; line-height:1.02; margin: 0 0 .6rem 0; color:#2F8E8E; font-weight:900; }
     .hero p  { font-size: 1.5rem; color:#3A6FD8; font-weight:700; margin:.2rem 0; }
 
     /* ---------- Mint hook panel ---------- */
