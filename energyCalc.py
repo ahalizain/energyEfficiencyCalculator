@@ -54,7 +54,8 @@ def save_response(payload: dict):
     try:
         client.table("survey_responses").insert(payload).execute()
         return True
-    except Exception:
+    except Exception as e:
+        st.error(f"Supabase insert error: {e}")
         return False
 
 # ======================================================
@@ -393,8 +394,6 @@ def render_survey():
     with res_tab:
         st.header("Your Individualized Report")
         if st.button("⚡ Calculate My Savings"):
-            ok = save_response({...})
-            st.toast("Saved ✅" if ok else "Save failed ❌")
             bar = st.progress(0)
             for p in (25, 60, 100):
                 time.sleep(0.25); bar.progress(p)
