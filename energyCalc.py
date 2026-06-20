@@ -48,9 +48,6 @@ def get_supabase():
         return None
 
 def save_response(payload: dict):
-    for k, v in payload.items():
-        if isinstance(v, set):
-            st.error(f"⚠️ '{k}' is a set: {v}")   # this names the bad field
     client = get_supabase()
     if client is None:
         return False
@@ -396,7 +393,22 @@ def render_survey():
     with res_tab:
         st.header("Your Individualized Report")
         if st.button("⚡ Calculate My Savings"):
-            ok = save_response({...})
+            ok = save_response({
+                "session_id": st.session_state.session_id,
+                "house_area": int(house_area),
+                "kwh_consumption": float(kwh_consumption),
+                "dollar_cost": float(dollar_kwh_consumption),
+                "total_kwh_saved": float(total_kwh_saved),
+                "total_money_saved": float(total_money_saved),
+                "bulbs_kwh": float(bulb_savings),
+                "thermostat_kwh": float(thermostat_kwh),
+                "windows_kwh": float(windows_kwh),
+                "washer_kwh": float(washer_kwh),
+                "dryer_kwh": float(dryer_kwh),
+                "oven_kwh": float(oven_kwh),
+                "refrigerator_kwh": float(refrigerator_kwh),
+                "owns_ev": ev,
+            })
             st.toast("Saved ✅" if ok else "Save failed ❌")
             bar = st.progress(0)
             for p in (25, 60, 100):
