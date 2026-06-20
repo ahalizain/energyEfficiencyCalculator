@@ -524,9 +524,8 @@ def render_about():
     st.write("This free tool helps anyone find practical ways to make their home more energy efficient, "
              "using public data from the EPA and ENERGY STAR. Created by Zain Ali Ahmad. You can reach me at energybillsaving101@gmail.com with any questions. Last updated June 2026.")
     st.subheader("How to fill out each question")
+    st.write("Note: The video is for an old version of the app, however the questions are the exact same. Please contact me with any questions you may have.")
     st.video("https://www.youtube.com/watch?v=AxiDexkZKR0")
-    st.write("Questions or feedback? Add your contact details here.")
-
 # ======================================================
 # MAIN
 # ======================================================
@@ -534,7 +533,7 @@ def main():
     inject_css()
     render_sidebar()
     home, survey, credits, about = st.tabs(
-        ["🏠 Home", "📋 Survey", "📄 Credits & Disclaimers", "ℹ️ About"])
+        ["🏠 Home", "📋 Survey", "📄 Credits & Sources", "ℹ️ About"])
     with home:    render_home()
     with survey:  render_survey()
     with credits: render_credits()
