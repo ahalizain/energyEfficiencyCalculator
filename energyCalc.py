@@ -255,7 +255,7 @@ def render_home():
     # Hero title (teal, like the flyer header)
     st.markdown("""
     <div class="hero">
-        <h1>⚡ Energy Efficiency Calculator</h1>
+        <h1>⚡ Zain Ahmad's Energy Efficiency Calculator</h1>
         <p>Saving money on your energy bill hasn't been this fast. Ever.</p>
     </div>
     """, unsafe_allow_html=True)
