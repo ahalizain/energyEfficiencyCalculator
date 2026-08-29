@@ -36,27 +36,6 @@ GREEN = "#2E7D32"
 BLUE  = "#1565C0"
 
 # ======================================================
-# SUPABASE (anonymous data collection) — degrades gracefully
-# if secrets aren't set, so the app never crashes for users.
-# ======================================================
-#@st.cache_resource
-def get_supabase():
-    try:
-        from supabase import create_client
-        return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_ANON_KEY"])
-    except Exception:
-        return None
-
-def save_response(payload: dict):
-    client = get_supabase()
-    if client is None:
-        return False
-    try:
-        client.table("survey_responses").insert(payload).execute()
-        return True
-    except Exception as e:
-        return False
-# ======================================================
 # SESSION STATE
 # ======================================================
 if "session_id" not in st.session_state:
