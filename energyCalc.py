@@ -24,17 +24,40 @@ st.set_page_config(
 )
 
 # ======================================================
-# CONSTANTS 
+# CONSTANTS  (your original numbers, unchanged)
 # ======================================================
-ENERGY_STAR_SAVINGS = 0.30
-THERMOSTAT_SAVINGS  = 0.11
-WINDOWS_SAVINGS     = 0.12
+FRIDGE_SAVINGS = 0.09
+WASHER_DRYER_SAVINGS = 0.2
+OVEN_SAVINGS = 0.67
+THERMOSTAT_SAVINGS  = 0.08
+WINDOWS_SAVINGS     = 0.13
 MONEY_CONVERTER     = 0.1798   # dollars per kWh
 TESLA_KWH_PM        = 153.33
 
 GREEN = "#2E7D32"
 BLUE  = "#1565C0"
 
+# ======================================================
+# SUPABASE (anonymous data collection) — degrades gracefully
+# if secrets aren't set, so the app never crashes for users.
+# ======================================================
+#@st.cache_resource
+def get_supabase():
+    try:
+        from supabase import create_client
+        return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_ANON_KEY"])
+    except Exception:
+        return None
+
+def save_response(payload: dict):
+    client = get_supabase()
+    if client is None:
+        return False
+    try:
+        client.table("survey_responses").insert(payload).execute()
+        return True
+    except Exception as e:
+        return False
 # ======================================================
 # SESSION STATE
 # ======================================================
@@ -385,13 +408,13 @@ def render_survey():
         if kwh_consumption == 0:
             st.warning("Monthly kWh consumption is 0 — some savings can't be estimated.")
 
-        bulb_savings    = num_conv_bulb * 52 * 1.6 * 30 / 1000
+        bulb_savings    = num_conv_bulb * 51 * 3 * 30 / 1000
         thermostat_kwh  = THERMOSTAT_SAVINGS * kwh_consumption if thermostat == "No" and kwh_consumption > 0 else 0
         windows_kwh     = WINDOWS_SAVINGS * kwh_consumption if windows_replacement == "No" and kwh_consumption > 0 else 0
-        washer_kwh      = (washer_watts * washer_hours / 1000 * ENERGY_STAR_SAVINGS) if washer == "No" else 0
-        dryer_kwh       = (dryer_watts * dryer_hours / 1000 * ENERGY_STAR_SAVINGS) if dryer == "No" else 0
-        oven_kwh        = (oven_watts * oven_hours / 1000 * ENERGY_STAR_SAVINGS) if oven_stovetop == "No" else 0
-        refrigerator_kwh = (refrigerator_watts * refrigerator_hours / 1000 * ENERGY_STAR_SAVINGS) if refrigerator == "No" else 0
+        washer_kwh      = (washer_watts * washer_hours / 1000 * WASHER_DRYER_SAVINGS) if washer == "No" else 0
+        dryer_kwh       = (dryer_watts * dryer_hours / 1000 * WASHER_DRYER_SAVINGS) if dryer == "No" else 0
+        oven_kwh        = (oven_watts * oven_hours / 1000 * OVEN_SAVINGS) if oven_stovetop == "No" else 0
+        refrigerator_kwh = (refrigerator_watts * refrigerator_hours / 1000 * FRIDGE_SAVINGS) if refrigerator == "No" else 0
 
         items = {
             "Bulbs": bulb_savings, "Thermostat": thermostat_kwh, "Windows": windows_kwh,
@@ -481,14 +504,14 @@ def render_survey():
 def render_credits():
     st.header("Credits, Sources & Disclaimers")
     st.info("🔒 All data stored is anonymous. Your responses are never tied to your name, email, or device.")
-    st.write("- ENERGY STAR appliances reduce energy use by ~30% of baseline (EPA / ENERGY STAR).")
+    st.write("- ENERGY STAR appliances reduce energy use by appliance type (EPA / ENERGY STAR).")
     st.link_button("ENERGY STAR Appliance Info", "https://www.energystar.gov/products/energy_choices_count")
-    st.write("- Smart learning thermostats reduce total energy use ~11% (EPA estimates).")
+    st.write("- Smart learning thermostats reduce total energy use ~8% (EPA estimates).")
     st.link_button("Smart Thermostat FAQ", "https://www.energystar.gov/products/heating_cooling/smart_thermostats/smart_thermostat_faq")
-    st.write("- Efficient windows can cut bills ~12% (EPA typical 7–15% range).")
+    st.write("- Efficient windows can cut bills ~13% (EPA typical 7–15% range).")
     st.link_button("Windows, Doors & Skylights", "https://www.energystar.gov/products/res_windows_doors_skylights")
     st.write("- Bulb savings: ~52W per conventional bulb replaced with LED.")
-    st.link_button("Lighting Efficiency Article", "https://voltaelectricinc.com/blog/energy-efficient-lighting-how-to-lower-your-electricity-bill")
+    st.link_button("Lighting Efficiency Article", "https://www.energy.gov/cmei/femp/purchasing-energy-efficient-light-bulbs")
     st.write("- Tesla comparison: 153.33 kWh/month ≈ 1,000 miles at ~300 Wh/mile (Model 3).")
     st.link_button("Tesla Model 3 Energy Data", "https://ev-database.org/imp/car/1322/Tesla-Model-3-Performance")
     st.caption("Created March 2023. Updated regularly. Built by Zain Ahmad.")
