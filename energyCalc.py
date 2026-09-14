@@ -24,7 +24,7 @@ st.set_page_config(
 )
 
 # ======================================================
-# CONSTANTS  (your original numbers, unchanged)
+# CONSTANTS 
 # ======================================================
 ENERGY_STAR_SAVINGS = 0.30
 THERMOSTAT_SAVINGS  = 0.11
