@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 import io
-import uuid
 
 import matplotlib
 matplotlib.use("Agg")
@@ -46,31 +45,8 @@ GREEN = "#2E7D32"
 BLUE  = "#1565C0"
 
 # ======================================================
-# SUPABASE (anonymous data collection) — degrades gracefully
-# if secrets aren't set, so the app never crashes for users.
-# ======================================================
-#@st.cache_resource
-def get_supabase():
-    try:
-        from supabase import create_client
-        return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_ANON_KEY"])
-    except Exception:
-        return None
-
-def save_response(payload: dict):
-    client = get_supabase()
-    if client is None:
-        return False
-    try:
-        client.table("survey_responses").insert(payload).execute()
-        return True
-    except Exception as e:
-        return False
-# ======================================================
 # SESSION STATE
 # ======================================================
-if "session_id" not in st.session_state:
-    st.session_state.session_id = str(uuid.uuid4())
 for k, v in {"test_mode": False, "test_case_used": False,
              "confirm_overwrite": False, "calculated": False}.items():
     st.session_state.setdefault(k, v)
@@ -406,7 +382,6 @@ def render_survey():
             for p in (25, 60, 100):
                 time.sleep(0.25); bar.progress(p)
             st.session_state.calculated = True
-            st.session_state.do_save = True  # write to DB once, below
 
         if not st.session_state.calculated:
             st.info("Fill out the **General Info** and **Appliances** subtabs, then press the button above.")
@@ -475,26 +450,6 @@ def render_survey():
             ax_sc.set_xlabel("Category"); ax_sc.set_ylabel("kWh Saved")
             ax_sc.set_title("Size represents dollar savings", fontweight="bold")
             ax_sc.grid(alpha=0.3); plt.tight_layout()
-
-            # ----- save to Supabase ONCE per calculate press -----
-            if st.session_state.get("do_save"):
-                ok = save_response({
-                    "session_id": st.session_state.session_id,
-                    "house_area": int(house_area),
-                    "kwh_consumption": float(kwh_consumption),
-                    "dollar_cost": float(dollar_kwh_consumption),
-                    "total_kwh_saved": float(total_kwh_saved),
-                    "total_money_saved": float(total_money_saved),
-                    "bulbs_kwh": float(bulb_savings),
-                    "thermostat_kwh": float(thermostat_kwh),
-                    "windows_kwh": float(windows_kwh),
-                    "washer_kwh": float(washer_kwh),
-                    "dryer_kwh": float(dryer_kwh),
-                    "oven_kwh": float(oven_kwh),
-                    "refrigerator_kwh": float(refrigerator_kwh),
-                    "owns_ev": ev,
-                })
-                st.session_state.do_save = False
 
             # ----- PDF download -----
             st.divider()
