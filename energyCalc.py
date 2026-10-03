@@ -29,7 +29,7 @@ HVAC_PERCENTAGE = 0.5  # 50% of total energy use is HVAC (heating & cooling)
 #MAJORAPP_PERCENTAGE = 0.2
 #BULBS_PERCENTAGE = 0.1
 #MISC_USE_PERCENTAGE = 0.2 # 20% of total energy use is miscellaneous
-FRIDGE_SAVINGS = 0.07 * 0.09
+FRIDGE_SAVINGS = 0.09  *  0.07#from the EIA article
 WASHER__SAVINGS = 0.02
 DRYER_SAVINGS = 0.05
 OVEN_SAVINGS = 0.05
@@ -356,7 +356,7 @@ def render_survey():
         oven_watts, oven_hours = 2300.0, 25.0
         washer_watts, washer_hours = 900.0, 24.0
         dryer_watts, dryer_hours = 3250.0, 30.0
-        refrigerator_watts, refrigerator_hours = 400.0, 720.0
+        refrigerator_watts, refrigerator_hours = 167.0, 720.0
 
         if oven_stovetop == "No":
             m = st.selectbox("Oven/Stovetop power mode", ["Actual", "Average"], key="oven_power_mode")
