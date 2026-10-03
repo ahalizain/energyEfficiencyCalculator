@@ -297,7 +297,7 @@ def render_home():
     """, unsafe_allow_html=True)
 
     st.write("")
-    st.success("👉 Head to the **Survey** tab above to get started. None of your answers are tied to you — everything is anonymous.")
+    st.success("👉 Head to the **Survey** tab above to get started.")
 
 # ======================================================
 # TAB 2 — SURVEY (3 subtabs).  Returns nothing; renders results inline.
@@ -466,7 +466,7 @@ def render_survey():
 # ======================================================
 def render_credits():
     st.header("Credits, Sources & Disclaimers")
-    st.info("🔒 All data stored is anonymous. Your responses are never tied to your name, email, or device.")
+    st.info("🔒 All data stored is anonymous. Your responses are never tied to your name, email, or device. Your answers are used to calculate potential energy savings during this session.")
     st.write("- ENERGY STAR appliances reduce energy use by appliance type (EPA / ENERGY STAR).")
     st.link_button("ENERGY STAR Appliance Info", "https://www.energysage.com/electricity/house-watts/how-many-watts-does-a-refrigerator-use/")
     st.write("- Smart learning thermostats reduce total energy use ~8% (EPA estimates).")
