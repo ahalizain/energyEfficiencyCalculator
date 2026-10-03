@@ -1,7 +1,7 @@
 import streamlit as st
 import time
 import io
-
+import os #railway addition
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -205,12 +205,23 @@ def render_sidebar():
         st.subheader("🧪 Developer Tools")
         pw = st.text_input("Password to load test case", type="password",
                            disabled=st.session_state.test_case_used)
+        #the following block is for an addition to Railway - railway addition
         if st.button("Load Test Case", disabled=st.session_state.test_case_used):
-            if pw != st.secrets.get("TEST_CASE_PASSWORD", None):
+            expected_password = os.environ.get("TEST_CASE_PASSWORD")
+
+            if not expected_password:
+                try:
+                    expected_password = st.secrets.get("TEST_CASE_PASSWORD")
+                except FileNotFoundError:
+                    expected_password = None
+
+            if not expected_password:
+                st.error("Developer test-case access is not configured.")
+            elif pw != expected_password:
                 st.error("Incorrect password.")
             else:
                 st.session_state.confirm_overwrite = True
-
+            
         if st.session_state.confirm_overwrite:
             st.warning("Overwrite ALL inputs with the test case?")
             if st.button("Yes, overwrite"):
