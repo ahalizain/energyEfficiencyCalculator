@@ -488,9 +488,6 @@ def render_survey():
         m2.metric("Monthly $ Saved", f"${total_money_saved:.2f}")
         m3.metric("Yearly $ Saved", f"${total_money_saved*12:.2f}")
 
-        if total_kwh_saved >= TESLA_KWH_PM:
-            st.success("🚗 You could save enough energy monthly to charge an electric vehicle!")
-
         if total_kwh_saved > 0:
             filtered = {k: v for k, v in items.items() if v > 0}
 
