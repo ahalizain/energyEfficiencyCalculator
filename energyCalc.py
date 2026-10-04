@@ -23,16 +23,61 @@ st.set_page_config(
 )
 
 # ======================================================
-# CONSTANTS  (original numbers, unchanged)
+# CONSTANTS  (savings factors and EIA bill shares kept separate)
 # ======================================================
 HVAC_PERCENTAGE = 0.5  # 50% of total energy use is HVAC (heating & cooling)
 #MAJORAPP_PERCENTAGE = 0.2
 #BULBS_PERCENTAGE = 0.1
 #MISC_USE_PERCENTAGE = 0.2 # 20% of total energy use is miscellaneous
-FRIDGE_SAVINGS = 0.09  *  0.07#from the EIA article
-WASHER_SAVINGS = 0.02 * 0.004
-DRYER_SAVINGS = 0.05 * 0.045 #from the EIA article
-OVEN_SAVINGS = 0.05 *0.014 #from the EIA article
+# Savings factors apply to the appliance's energy use in either mode.
+FRIDGE_SAVINGS = 0.09
+WASHER_SAVINGS = 0.02
+DRYER_SAVINGS = 0.05
+OVEN_SAVINGS = 0.05
+
+# EIA shares apply ONLY when estimating appliance use from the whole bill.
+FRIDGE_EIA_SHARE = 0.07
+WASHER_EIA_SHARE = 0.004
+DRYER_EIA_SHARE = 0.045
+OVEN_EIA_SHARE = 0.014
+
+# One source of truth for appliance labels, defaults, and calculation factors.
+APPLIANCES = {
+    "oven": {
+        "label": "Oven/Stovetop", "efficiency_key": "oven_stovetop",
+        "watts": 2300.0, "hours": 25.0,
+        "savings_factor": OVEN_SAVINGS, "eia_share": OVEN_EIA_SHARE,
+    },
+    "washer": {
+        "label": "Washer", "efficiency_key": "washer",
+        "watts": 900.0, "hours": 24.0,
+        "savings_factor": WASHER_SAVINGS, "eia_share": WASHER_EIA_SHARE,
+    },
+    "dryer": {
+        "label": "Dryer", "efficiency_key": "dryer",
+        "watts": 3250.0, "hours": 30.0,
+        "savings_factor": DRYER_SAVINGS, "eia_share": DRYER_EIA_SHARE,
+    },
+    "refrigerator": {
+        "label": "Refrigerator", "efficiency_key": "refrigerator",
+        "watts": 167.0, "hours": 720.0,
+        "savings_factor": FRIDGE_SAVINGS, "eia_share": FRIDGE_EIA_SHARE,
+    },
+}
+
+
+def calculate_appliance_savings(mode, monthly_kwh, watts, hours,
+                               savings_factor, eia_share, energy_efficient):
+    """Return monthly kWh saved using the selected appliance calculation path."""
+    if mode not in ("Average", "Actual"):
+        raise ValueError(f"Unknown appliance calculation mode: {mode!r}")
+    if energy_efficient:
+        return 0.0
+    if mode == "Average":
+        return savings_factor * eia_share * monthly_kwh
+    return watts * hours / 1000 * savings_factor
+
+
 THERMOSTAT_SAVINGS  = 0.08 * HVAC_PERCENTAGE
 WINDOWS_SAVINGS     = 0.13 * HVAC_PERCENTAGE
 MONEY_CONVERTER     = 0.1798   # dollars per kWh
@@ -230,10 +275,12 @@ def render_sidebar():
                     "windows_replacement": "No", "num_conv_bulb": 50, "num_led_bulb": 10,
                     "thermostat": "No", "heating": "No", "air_conditioning": "Yes", "hot_water": "No",
                     "oven_stovetop": "No", "washer": "No", "dryer": "No", "refrigerator": "No",
-                    "oven_power_mode": "Average", "oven_usage_mode": "Average",
-                    "washer_power_mode": "Average", "washer_usage_mode": "Average",
-                    "dryer_power_mode": "Average", "dryer_usage_mode": "Average",
-                    "refrigerator_power_mode": "Average", "refrigerator_usage_mode": "Average",
+                    "appliance_mode": "Average",
+                    **{
+                        f"{name}_{field}": spec[field]
+                        for name, spec in APPLIANCES.items()
+                        for field in ("watts", "hours")
+                    },
                     "ev": "No", "test_mode": True, "test_case_used": True,
                     "confirm_overwrite": False, "calculated": True,
                 })
@@ -342,45 +389,52 @@ def render_survey():
     # ---------- APPLIANCES ----------
     with app_tab:
         st.header("Energy Efficient Appliances")
+        appliance_mode = st.radio(
+            "How would you like to estimate appliance energy use?",
+            ["Average", "Actual"], key="appliance_mode", horizontal=True,
+        )
+        if appliance_mode == "Average":
+            st.caption(
+                "Estimate appliance savings using your total monthly electricity "
+                "consumption and each appliance's share."
+            )
+        else:
+            st.caption(
+                "Use each appliance's wattage and hours per month. Median values "
+                "are prefilled below; you can edit any of them. You may need your energy bill for this section"
+            )
+
         st.write("Which of the following are energy efficient (ENERGY STAR)?")
-        oven_stovetop = st.selectbox("Oven/Stovetop", ["Yes", "No"], key="oven_stovetop")
-        washer = st.selectbox("Washer", ["Yes", "No"], key="washer")
-        dryer = st.selectbox("Dryer", ["Yes", "No"], key="dryer")
-        refrigerator = st.selectbox("Refrigerator", ["Yes", "No"], key="refrigerator")
+        efficiency_answers = {
+            name: st.selectbox(spec["label"], ["Yes", "No"], key=spec["efficiency_key"])
+            for name, spec in APPLIANCES.items()
+        }
 
-        st.divider()
-        st.subheader("Details for non–ENERGY STAR appliances")
-        st.caption("Only the appliances you marked 'No' appear below. Pick 'Average' to use typical values.")
+        # Keep editable values across reruns, including when Average hides the
+        # widgets. Explicit assignment prevents Streamlit's widget cleanup from
+        # deleting these keys when the corresponding inputs are not displayed.
+        for name, spec in APPLIANCES.items():
+            for field in ("watts", "hours"):
+                key = f"{name}_{field}"
+                st.session_state[key] = st.session_state.get(key, spec[field])
 
-        # defaults so the variables always exist - actual savings calculation
-        oven_watts, oven_hours = 2300.0, 25.0
-        washer_watts, washer_hours = 900.0, 24.0
-        dryer_watts, dryer_hours = 3250.0, 30.0
-        refrigerator_watts, refrigerator_hours = 167.0, 720.0
-
-        if oven_stovetop == "No":
-            m = st.selectbox("Oven/Stovetop power mode", ["Actual", "Average"], key="oven_power_mode")
-            oven_watts = st.number_input("Oven/Stovetop power (watts)", min_value=0.0, key="oven_watts") if m == "Actual" else 2350.0
-            u = st.selectbox("Oven/Stovetop usage mode", ["Actual", "Average"], key="oven_usage_mode")
-            oven_hours = st.number_input("Oven/Stovetop usage (hours/month)", min_value=0.0, key="oven_hours") if u == "Actual" else 25.0
-
-        if washer == "No":
-            m = st.selectbox("Washer power mode", ["Actual", "Average"], key="washer_power_mode")
-            washer_watts = st.number_input("Washer power (watts)", min_value=0.0, key="washer_watts") if m == "Actual" else 900.0
-            u = st.selectbox("Washer usage mode", ["Actual", "Average"], key="washer_usage_mode")
-            washer_hours = st.number_input("Washer usage (hours/month)", min_value=0.0, key="washer_hours") if u == "Actual" else 24.0
-
-        if dryer == "No":
-            m = st.selectbox("Dryer power mode", ["Actual", "Average"], key="dryer_power_mode")
-            dryer_watts = st.number_input("Dryer power (watts)", min_value=0.0, key="dryer_watts") if m == "Actual" else 3250.0
-            u = st.selectbox("Dryer usage mode", ["Actual", "Average"], key="dryer_usage_mode")
-            dryer_hours = st.number_input("Dryer usage (hours/month)", min_value=0.0, key="dryer_hours") if u == "Actual" else 30.0
-
-        if refrigerator == "No":
-            m = st.selectbox("Refrigerator power mode", ["Actual", "Average"], key="refrigerator_power_mode")
-            refrigerator_watts = st.number_input("Refrigerator power (watts)", min_value=0.0, key="refrigerator_watts") if m == "Actual" else 167
-            u = st.selectbox("Refrigerator usage mode", ["Actual", "Average"], key="refrigerator_usage_mode")
-            refrigerator_hours = st.number_input("Refrigerator usage (hours/month)", min_value=0.0, key="refrigerator_hours") if u == "Actual" else 720.0
+        if appliance_mode == "Actual":
+            st.divider()
+            st.subheader("Appliance power and monthly usage")
+            st.caption(
+                "Open each appliance to review or change its values. Upgrade "
+                "savings are counted only for appliances marked 'No' above."
+            )
+            for name, spec in APPLIANCES.items():
+                with st.expander(spec["label"]):
+                    st.number_input(
+                        f"{spec['label']} power (watts)",
+                        min_value=0.0, step=1.0, key=f"{name}_watts",
+                    )
+                    st.number_input(
+                        f"{spec['label']} usage (hours/month)",
+                        min_value=0.0, step=1.0, key=f"{name}_hours",
+                    )
 
         st.divider()
         ev = st.selectbox("Do you currently own an electric vehicle?", ["Yes", "No"], key="ev")
@@ -398,22 +452,32 @@ def render_survey():
             st.info("Fill out the **General Info** and **Appliances** subtabs, then press the button above.")
             return
 
-        # ----- the math (identical formulas to your original) -----
+        # ----- savings calculations -----
         if kwh_consumption == 0:
             st.warning("Monthly kWh consumption is 0 — some savings can't be estimated.")
 
         bulb_savings    = num_conv_bulb * 51 * 3 * 30 / 1000
         thermostat_kwh  = THERMOSTAT_SAVINGS *  kwh_consumption if thermostat == "No" and kwh_consumption > 0 else 0
         windows_kwh     = WINDOWS_SAVINGS * kwh_consumption if windows_replacement == "No" and kwh_consumption > 0 else 0
-        washer_kwh      = (washer_watts * washer_hours / 1000 * WASHER_SAVINGS) if washer == "No" else 0
-        dryer_kwh       = (dryer_watts * dryer_hours / 1000 * DRYER_SAVINGS) if dryer == "No" else 0
-        oven_kwh        = (oven_watts * oven_hours / 1000 * OVEN_SAVINGS) if oven_stovetop == "No" else 0
-        refrigerator_kwh = (refrigerator_watts * refrigerator_hours / 1000 * FRIDGE_SAVINGS) if refrigerator == "No" else 0
+        appliance_savings = {
+            spec["label"]: calculate_appliance_savings(
+                mode=appliance_mode,
+                monthly_kwh=kwh_consumption,
+                watts=st.session_state[f"{name}_watts"],
+                hours=st.session_state[f"{name}_hours"],
+                savings_factor=spec["savings_factor"],
+                eia_share=spec["eia_share"],
+                energy_efficient=efficiency_answers[name] == "Yes",
+            )
+            for name, spec in APPLIANCES.items()
+        }
 
         items = {
             "Bulbs": bulb_savings, "Thermostat": thermostat_kwh, "Windows": windows_kwh,
-            "Washer": washer_kwh, "Dryer": dryer_kwh,
-            "Oven/Stovetop": oven_kwh, "Refrigerator": refrigerator_kwh,
+            "Washer": appliance_savings["Washer"],
+            "Dryer": appliance_savings["Dryer"],
+            "Oven/Stovetop": appliance_savings["Oven/Stovetop"],
+            "Refrigerator": appliance_savings["Refrigerator"],
         }
         total_kwh_saved = sum(items.values())
         total_money_saved = total_kwh_saved * MONEY_CONVERTER
@@ -498,7 +562,7 @@ def render_about():
     st.write("This free tool helps anyone find practical ways to make their home more energy efficient, "
              "using public data from the EPA and ENERGY STAR. Created by Zain Ali Ahmad. You can reach me at energybillsaving101@gmail.com with any questions. Last updated June 2026.")
     st.subheader("How to fill out each question")
-    st.write("Note: The video is for an old version of the app, however the questions are the exact same. Please contact me with any questions you may have.")
+    st.write("Note: The video shows an older version of the app. The Appliances tab now has one Average/Actual choice for all appliances. Please contact me with any questions you may have.")
     st.video("https://www.youtube.com/watch?v=AxiDexkZKR0")
 # ======================================================
 # MAIN
