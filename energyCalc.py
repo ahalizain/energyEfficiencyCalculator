@@ -30,9 +30,9 @@ HVAC_PERCENTAGE = 0.5  # 50% of total energy use is HVAC (heating & cooling)
 #BULBS_PERCENTAGE = 0.1
 #MISC_USE_PERCENTAGE = 0.2 # 20% of total energy use is miscellaneous
 FRIDGE_SAVINGS = 0.09  *  0.07#from the EIA article
-WASHER__SAVINGS = 0.02
-DRYER_SAVINGS = 0.05
-OVEN_SAVINGS = 0.05
+WASHER_SAVINGS = 0.02 * 0.004
+DRYER_SAVINGS = 0.05 * 0.045 #from the EIA article
+OVEN_SAVINGS = 0.05 *0.014 #from the EIA article
 THERMOSTAT_SAVINGS  = 0.08 * HVAC_PERCENTAGE
 WINDOWS_SAVINGS     = 0.13 * HVAC_PERCENTAGE
 MONEY_CONVERTER     = 0.1798   # dollars per kWh
@@ -352,7 +352,7 @@ def render_survey():
         st.subheader("Details for non–ENERGY STAR appliances")
         st.caption("Only the appliances you marked 'No' appear below. Pick 'Average' to use typical values.")
 
-        # defaults so the variables always exist
+        # defaults so the variables always exist - actual savings calculation
         oven_watts, oven_hours = 2300.0, 25.0
         washer_watts, washer_hours = 900.0, 24.0
         dryer_watts, dryer_hours = 3250.0, 30.0
@@ -378,7 +378,7 @@ def render_survey():
 
         if refrigerator == "No":
             m = st.selectbox("Refrigerator power mode", ["Actual", "Average"], key="refrigerator_power_mode")
-            refrigerator_watts = st.number_input("Refrigerator power (watts)", min_value=0.0, key="refrigerator_watts") if m == "Actual" else 400.0
+            refrigerator_watts = st.number_input("Refrigerator power (watts)", min_value=0.0, key="refrigerator_watts") if m == "Actual" else 167
             u = st.selectbox("Refrigerator usage mode", ["Actual", "Average"], key="refrigerator_usage_mode")
             refrigerator_hours = st.number_input("Refrigerator usage (hours/month)", min_value=0.0, key="refrigerator_hours") if u == "Actual" else 720.0
 
@@ -405,7 +405,7 @@ def render_survey():
         bulb_savings    = num_conv_bulb * 51 * 3 * 30 / 1000
         thermostat_kwh  = THERMOSTAT_SAVINGS *  kwh_consumption if thermostat == "No" and kwh_consumption > 0 else 0
         windows_kwh     = WINDOWS_SAVINGS * kwh_consumption if windows_replacement == "No" and kwh_consumption > 0 else 0
-        washer_kwh      = (washer_watts * washer_hours / 1000 * WASHER__SAVINGS) if washer == "No" else 0
+        washer_kwh      = (washer_watts * washer_hours / 1000 * WASHER_SAVINGS) if washer == "No" else 0
         dryer_kwh       = (dryer_watts * dryer_hours / 1000 * DRYER_SAVINGS) if dryer == "No" else 0
         oven_kwh        = (oven_watts * oven_hours / 1000 * OVEN_SAVINGS) if oven_stovetop == "No" else 0
         refrigerator_kwh = (refrigerator_watts * refrigerator_hours / 1000 * FRIDGE_SAVINGS) if refrigerator == "No" else 0
