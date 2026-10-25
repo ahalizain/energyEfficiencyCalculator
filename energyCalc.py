@@ -557,7 +557,7 @@ def render_credits():
 def render_about():
     st.header("About & Video Guide")
     st.write("This free tool helps anyone find practical ways to make their home more energy efficient, "
-             "using public data from the EPA and ENERGY STAR. Created by Zain Ali Ahmad. You can reach me at energybillsaving101@gmail.com with any questions. Last updated June 2026.")
+             "using public data from the EPA and ENERGY STAR. Created by Zain Ali Ahmad. You can reach me at energybillsaving101@gmail.com with any questions. Last updated October 2026.")
     st.subheader("How to fill out each question")
     st.video("https://youtu.be/PJB2EFYIxfc")
 # ======================================================
