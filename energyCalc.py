@@ -549,7 +549,7 @@ def render_credits():
     st.link_button("Lighting Efficiency Article", "https://www.energy.gov/cmei/femp/purchasing-energy-efficient-light-bulbs")
     st.write("- Tesla comparison: 153.33 kWh/month ≈ 1,000 miles at ~300 Wh/mile (Model 3).")
     st.link_button("Tesla Model 3 Energy Data", "https://ev-database.org/imp/car/1322/Tesla-Model-3-Performance")
-    st.caption("Created March 2023. Updated regularly. Built by Zain Ahmad.")
+    st.caption("Created March 2023. Updated regularly. Built by Zain Ali Ahmad.")
 
 # ======================================================
 # TAB 4 — ABOUT / VIDEO GUIDE
@@ -559,8 +559,7 @@ def render_about():
     st.write("This free tool helps anyone find practical ways to make their home more energy efficient, "
              "using public data from the EPA and ENERGY STAR. Created by Zain Ali Ahmad. You can reach me at energybillsaving101@gmail.com with any questions. Last updated June 2026.")
     st.subheader("How to fill out each question")
-    st.write("Note: The video shows an older version of the app. The Appliances tab now has one Average/Actual choice for all appliances. Please contact me with any questions you may have.")
-    st.video("https://www.youtube.com/watch?v=AxiDexkZKR0")
+    st.video("https://youtu.be/PJB2EFYIxfc")
 # ======================================================
 # MAIN
 # ======================================================
